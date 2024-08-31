@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BKM Service - Portfolio & Formation Python</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(45deg, #0062cc, #0056b3);
+            color: white;
+            padding: 20px 0;
+        }
+
+        header h1 {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 2em;
+            margin-top: 20px;
+        }
+
+        .rounded-circle {
+            border: 5px solid #0056b3;
+        }
+
+        .container h2, .container h3 {
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #0056b3;
+        }
+
+        .form-control {
+            border-radius: 50px;
+            padding: 15px;
+            font-size: 1.1em;
+        }
+
+        .form-check-label {
+            font-size: 1em;
+        }
+
+        .form-check-input {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-primary {
+            background: #0062cc;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 30px;
+            font-size: 1.2em;
+        }
+
+        .btn-primary:hover {
+            background: #004085;
+        }
+
+        footer {
+            background: linear-gradient(45deg, #0056b3, #004085);
+            color: white;
+            padding: 20px 0;
+        }
+
+        footer p {
+            margin: 10px 0;
+        }
+
+        .social-icons a {
+            color: white;
+            margin: 0 10px;
+            font-size: 1.5em;
+        }
+
+        .social-icons a:hover {
+            color: #cccccc;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="text-center">
+        <h1>BKM SERVICE</h1>
+        <p>Email : issiako21business@buz.com | WhatsApp : (+226)54641531 / 73713252</p>
+    </header>
+
+    <!-- Introduction Section -->
+    <section class="container text-center">
+        <h2>Salut 👋🏻 ! Je suis Bokoum Issiaka</h2>
+        <img src="Issiaka.jpg" alt="Bokoum Issiaka" class="rounded-circle my-4" width="150">
+        <p>Je suis un ingénieur en informatique passionné, spécialisé dans la cybersécurité, la programmation d'applications et de sites web, ainsi que la maintenance informatique. J'excelle également dans le déblocage d'ordinateurs et de téléphones portables.</p>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="container">
+        <h3>Mes compétences</h3>
+        <p><div>
+    <ul style="list-style-type: none; padding-left: 0;">
+        <li>✔️ Cybersécurité : Expertise dans la protection des systèmes informatiques contre les menaces et les attaques.</li>
+        <li>✔️ Programmation d'Applications : Développement d'applications robustes et performantes.</li>
+        <li>✔️ Développement Web : Création de sites web modernes et réactifs.</li>
+        <li>✔️ Maintenance Informatique : Diagnostique et réparation de matériel et de logiciels.</li>
+        <li>✔️ Déblocage d'Ordinateurs et de Téléphones : Expertise dans le déblocage de divers dispositifs.</li>
+    </ul>
+</div></p>
+    </section>
+
+    <!-- Python Training Section -->
+    <section class="container">
+        <h3>Formation : Les bases de Python</h3>
+        <p>Aujourd'hui, j'ouvre une formation sur les bases de Python. Cette formation est conçue pour vous aider à démarrer avec Python, l'un des langages de programmation les plus populaires.</p>
+        <p>Une attestation sera délivrée à la fin de la formation.</p>
+        <p>Pour seulement 8$, vous pouvez adhérer à cette formation et commencer à apprendre Python.</p>
+
+        <!-- Registration Form -->
+        <form id="registration-form">
+            <div class="form-group">
+                <label for="fullName">Nom Complet</label>
+                <input type="text" class="form-control" id="fullName" placeholder="Entrez votre nom complet" required>
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" class="form-control" id="email" placeholder="Entrez votre adresse email" required>
+            </div>
+            <div class="form-group">
+                <label for="whatsapp">WhatsApp</label>
+                <input type="tel" class="form-control" id="whatsapp" placeholder="Entrez votre numéro WhatsApp" required>
+            </div>
+            <div class="form-group">
+                <label for="paymentMethod">Moyen de Paiement</label>
+                <input type="text" class="form-control" id="paymentMethod" placeholder="Ex: Orange Money" required>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                <label class="form-check-label" for="termsCheck">Je confirme avoir lu les conditions d'adhésion à la formation et j'accepte payer les frais d'inscription qui s'élèvent à 8$.</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Valider</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <p>Merci pour votre confiance 🙏🏻</p>
+        <p>BKM SERVICE - TOUS DROITS RÉSERVÉS &copy; 2024</p>
+        <div class="social-icons">
+            <a href="https://wa.me/1234567890" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://twitter.com/YourTwitterHandle" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://t.me/YourTelegramHandle" target="_blank"><i class="fab fa-telegram"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('registration-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const termsChecked = document.getElementById('termsCheck').checked;
+
+            if (termsChecked) {
+                // Send the form data to the server using fetch API
+                fetch('https://activationwindows.pythonanywhere.com/inscription_entente', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ fullName, email, whatsapp, paymentMethod })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.fire('Succès', 'Votre inscription a été validée!', 'success');
+                })
+                .catch(error => {
+                    Swal.fire('Erreur', 'Une erreur est survenue, veuillez réessayer.', 'error');
+                });
+            }
+        });
+    </script>
+</body>
+          </html>
