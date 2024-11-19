@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculatrice - Développée par BOKOUM Issiaka, Powered by A-TECH 😂</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .calculator {
+            background-color: #f3f3f3;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+
+        .calculator-screen {
+            width: 100%;
+            height: 50px;
+            background-color: #eee;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: right;
+            font-size: 1.5rem;
+            padding: 10px;
+            box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .btn {
+            height: 50px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .number {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .operator {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .clear {
+            background-color: red;
+            color: #fff;
+        }
+
+        .equal {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .btn:hover {
+            filter: brightness(0.9);
+        }
+    </style>
+</head>
+<body>
+    <!-- Titre ajouté ici -->
+    <h1>Calculatrice - Développée par BOKOUM Issiaka, Powered by A-TECH 😂</h1>
+    <div class="calculator">
+        <input type="text" class="calculator-screen" disabled />
+        <div class="calculator-buttons">
+            <button class="btn number">7</button>
+            <button class="btn number">8</button>
+            <button class="btn number">9</button>
+            <button class="btn operator">+</button>
+            <button class="btn number">4</button>
+            <button class="btn number">5</button>
+            <button class="btn number">6</button>
+            <button class="btn operator">-</button>
+            <button class="btn number">1</button>
+            <button class="btn number">2</button>
+            <button class="btn number">3</button>
+            <button class="btn operator">x</button>
+            <button class="btn clear">C</button>
+            <button class="btn number">0</button>
+            <button class="btn equal">=</button>
+            <button class="btn operator">/</button>
+        </div>
+    </div>
+    <script>
+        const screen = document.querySelector('.calculator-screen');
+        const buttons = document.querySelectorAll('.btn');
+
+        let currentInput = '';
+        let previousInput = '';
+        let operator = '';
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.textContent;
+
+                if (button.classList.contains('number')) {
+                    currentInput += value;
+                    screen.value = currentInput;
+                } else if (button.classList.contains('operator')) {
+                    if (currentInput) {
+                        previousInput = currentInput;
+                        currentInput = '';
+                        operator = value;
+                        screen.value = previousInput + ' ' + operator;
+                    }
+                } else if (button.classList.contains('equal')) {
+                    if (previousInput && currentInput && operator) {
+                        currentInput = calculate(previousInput, currentInput, operator);
+                        screen.value = currentInput;
+                        previousInput = '';
+                        operator = '';
+                    }
+                } else if (button.classList.contains('clear')) {
+                    currentInput = '';
+                    previousInput = '';
+                    operator = '';
+                    screen.value = '';
+                }
+            });
+        });
+
+        function calculate(a, b, operator) {
+            a = parseFloat(a);
+            b = parseFloat(b);
+
+            switch (operator) {
+                case '+':
+                    return a + b;
+                case '-':
+                    return a - b;
+                case 'x':
+                    return a * b;
+                case '/':
+                    return b !== 0 ? a / b : 'Error';
+                default:
+                    return '';
+            }
+        }
+    </script>
+</body>
+</html>
