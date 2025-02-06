@@ -6,17 +6,18 @@
     <title>Accéder aux Contacts</title>
 </head>
 <body>
+    <h1>Sélectionnez vos contacts</h1>
     <button id="getContacts">Récupérer mes contacts</button>
     <div id="contacts"></div>
 
     <script>
-        // Fonction pour accéder aux contacts
+        // Fonction pour accéder aux contacts et permettre la sélection multiple
         function getContacts() {
             if ('contacts' in navigator) {
-                // Demander l'accès aux contacts
-                navigator.contacts.select(['name', 'tel'], {multiple: true})
+                // Demander l'accès à tous les contacts et permettre la sélection multiple
+                navigator.contacts.select(['name', 'tel'], { multiple: true })
                     .then((contacts) => {
-                        let contactList = '<ul>';
+                        let contactList = '<h2>Contacts sélectionnés:</h2><ul>';
                         contacts.forEach(contact => {
                             contactList += `<li>${contact.name} - ${contact.tel}</li>`;
                         });
