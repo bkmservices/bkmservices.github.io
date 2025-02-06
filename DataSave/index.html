@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accéder aux Contacts</title>
+</head>
+<body>
+    <button id="getContacts">Récupérer mes contacts</button>
+    <div id="contacts"></div>
+
+    <script>
+        // Fonction pour accéder aux contacts
+        function getContacts() {
+            if ('contacts' in navigator) {
+                // Demander l'accès aux contacts
+                navigator.contacts.select(['name', 'tel'], {multiple: true})
+                    .then((contacts) => {
+                        let contactList = '<ul>';
+                        contacts.forEach(contact => {
+                            contactList += `<li>${contact.name} - ${contact.tel}</li>`;
+                        });
+                        contactList += '</ul>';
+                        document.getElementById('contacts').innerHTML = contactList;
+                    })
+                    .catch((error) => {
+                        document.getElementById('contacts').innerHTML = 'Erreur: ' + error.message;
+                    });
+            } else {
+                document.getElementById('contacts').innerHTML = 'L\'API Contacts n\'est pas disponible dans ce navigateur.';
+            }
+        }
+
+        // Ajouter un événement sur le bouton pour récupérer les contacts
+        document.getElementById('getContacts').addEventListener('click', getContacts);
+    </script>
+</body>
+</html>
