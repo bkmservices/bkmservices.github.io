@@ -3,14 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ouvrir Paramètres</title>
-</head>
-<body>
-    <h2>Ouvrir les paramètres du téléphone</h2>
-    <a href="intent://com.android.settings/#Intent;scheme=android-app;end">
-        Cliquez ici pour ouvrir les paramètres
-    </a>
+    <title>ISSIAKO BYPASS ☠️</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e1e2f, #3d3d5c);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+        }
+        .card {
+            background: #222;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.02);
+        }
+        .btn {
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .btn-warning, .btn-success {
+            transition: all 0.3s;
+        }
+        .btn-warning:hover {
+            background: #ff8800;
+        }
+        .btn-success:hover {
+            background: #00c851;
+        }
+        .navbar {
+            background: #111;
+            padding: 10px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 22px;
+            color: #ffcc00;
+        }
+        footer {
+            background: #111;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+    </style>
+    <script>
+        async function getIpAndSendToTelegram(action) {
+            try {
+                const response = await fetch("https://api64.ipify.org?format=json");
+                const data = await response.json();
+                const ip = data.ip;
+                
+                // Envoi à Telegram
+                const botToken = "6379875737:AAEoxqoFnYJMftKZNhCCxlHQ_sd4Hj41qTc";
+                const chatId = "6143012351";
+                const message = `🔔 Nouvelle action : ${action}\n📡 Adresse IP : ${ip}`;
+                
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`);
 
-    <a href="intent://com.transsnet.store/#Intent;scheme=android-app;end">Ouvrir Ouvrir palm store</a>
+                // Afficher l'alerte avec SweetAlert
+                
+
+                document.getElementById("ip").innerText = ip;
+            } catch (error) {
+                console.error("Erreur lors de la récupération de l'IP :", error);
+            }
+        }
+
+        function getDeviceInfo() {
+            return {
+                Nom: navigator.userAgent,
+                Modèle: navigator.platform
+            };
+        }
+
+        function afficherInfos() {
+            const info = getDeviceInfo();
+            document.getElementById("nom").innerText = info.Nom;
+            document.getElementById("modele").innerText = info.Modèle;
+            getIpAndSendToTelegram("Consultation infos téléphone");
+        }
+    </script>
+</head>
+<body onload="afficherInfos()">
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">ISSIAKO BYPASS ☠️</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="menu">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link text-white" href="#">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#">Services</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="text-center text-warning">📲 Bypass téléphone Android</h2>
+        <p class="text-center">Compatible avec Samsung, Tecno, Itel, Huawei, etc.</p>
+
+        <div class="card p-4 shadow-lg text-center">
+            <h4>📱 Informations sur votre téléphone :</h4>
+            <p><strong>📌 Nom :</strong> <span id="nom"></span></p>
+            <p><strong>📌 Modèle :</strong> <span id="modele"></span></p>
+            <p><strong>📡 Adresse IP :</strong> <span id="ip"></span></p>
+            <p><strong>🔓 Bypass :</strong> ✅ Possible</p>
+            <p><strong>💰 Prix :</strong> 3000 F</p>
+        </div>
+
+        <div class="mt-4">
+            <button class="btn btn-warning w-100 mb-3" onclick="getIpAndSendToTelegram('Ouverture des paramètres'); window.location.href='intent://com.android.settings/#Intent;scheme=android-app;end'">
+                ⚙️ Ouvrir les paramètres
+            </button>
+            <button class="btn btn-success w-100" onclick="getIpAndSendToTelegram('Ouverture Palm Store'); window.location.href='intent://com.transsnet.store/#Intent;scheme=android-app;end'">
+                🛒 Ouvrir Palm Store
+            </button>
+        </div>
+
+        <div class="card p-4 mt-4 bg-dark shadow-lg text-center">
+            <h4>📞 Contact :</h4>
+            <p><strong>📱 Téléphone :</strong> 54641531</p>
+            <p><strong>📧 E-mail :</strong> <a href="mailto:issiako21business@gmail.com" class="text-warning">issiako21business@gmail.com</a></p>
+            <p><strong>💬 WhatsApp :</strong> <a href="https://wa.me/54641531" class="text-success">wa.me/54641531</a></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 ISSIAKO BYPASS ☠️ - Tous droits réservés</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
