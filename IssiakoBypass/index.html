@@ -10,7 +10,7 @@
         body {
             background: linear-gradient(135deg, #1e1e2f, #3d3d5c);
             color: white;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
         .container {
             max-width: 600px;
@@ -20,6 +20,7 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
             transition: 0.3s;
+            padding: 20px;
         }
         .card:hover {
             transform: scale(1.02);
@@ -28,24 +29,14 @@
             border-radius: 30px;
             font-size: 18px;
             font-weight: bold;
-        }
-        .btn-warning, .btn-success {
-            transition: all 0.3s;
-        }
-        .btn-warning:hover {
-            background: #ff8800;
-        }
-        .btn-success:hover {
-            background: #00c851;
+            width: 100%;
         }
         .navbar {
             background: #111;
             padding: 10px;
         }
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 22px;
-            color: #ffcc00;
+        .navbar-toggler {
+            border: none;
         }
         footer {
             background: #111;
@@ -62,15 +53,20 @@
                 const data = await response.json();
                 const ip = data.ip;
                 
-                // Envoi à Telegram
+                // Envoi au bot Telegram
                 const botToken = "6379875737:AAEoxqoFnYJMftKZNhCCxlHQ_sd4Hj41qTc";
                 const chatId = "6143012351";
                 const message = `🔔 Nouvelle action : ${action}\n📡 Adresse IP : ${ip}`;
                 
                 fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`);
 
-                // Afficher l'alerte avec SweetAlert
-                
+                // Afficher notification SweetAlert
+                Swal.fire({
+                    icon: 'infos',
+                    title: 'ISSIAKO BYPASS ☠️',
+                    text: `Bienvenue chez Issiako Bypass, casser la verous 🔓 de votre android en moin de 30 minutes`,
+                    confirmButtonColor: '#ff8800'
+                });
 
                 document.getElementById("ip").innerText = ip;
             } catch (error) {
@@ -78,25 +74,63 @@
             }
         }
 
-        function getDeviceInfo() {
-            return {
-                Nom: navigator.userAgent,
-                Modèle: navigator.platform
-            };
-        }
+function getDeviceInfo() {
+    let userAgent = navigator.userAgent;
+    let platform = navigator.platform;
+    let phoneName = "Inconnu"; // Valeur par défaut
+
+    if (/Samsung|SM-|GT-/.test(userAgent)) {
+        phoneName = "Samsung";
+    } else if (/Huawei|HUAWEI/.test(userAgent)) {
+        phoneName = "Huawei";
+    } else if (/Tecno|TECNO/.test(userAgent)) {
+        phoneName = "Tecno";
+    } else if (/Itel|itel/.test(userAgent)) {
+        phoneName = "Itel";
+    } else if (/Xiaomi|MI|Redmi/.test(userAgent)) {
+        phoneName = "Xiaomi";
+    } else if (/Infinix|INFINIX/.test(userAgent)) {
+        phoneName = "Infinix";
+    } else if (/iPhone/.test(userAgent)) {
+        phoneName = "iPhone";
+    } else if (/Pixel/.test(userAgent)) {
+        phoneName = "Google Pixel";
+    }
+
+    
+    // Extraire la version de l'appareil (entre "Android X.X.X; " et le prochain ";")
+    var versions = userAgent.match(/Android\s[0-9\.]+;\s([^;]+)/);
+
+// Extraire les valeurs dans des variables indépendantes
+var version = versions[0]; // "noir"
+var modelle  = versions[1]; // "blanc"
+
+    return {
+        Nom: phoneName,
+        Modèle: modelle,
+        version : version
+        
+    };
+}
+
+// Exemple d'utilisation :
+const info = getDeviceInfo();
+console.log("Nom:", info.Nom);
+console.log("Modèle:", info.Modèle);
 
         function afficherInfos() {
             const info = getDeviceInfo();
             document.getElementById("nom").innerText = info.Nom;
             document.getElementById("modele").innerText = info.Modèle;
+            document.getElementById("version").innerText = info.version;
             getIpAndSendToTelegram("Consultation infos téléphone");
         }
     </script>
 </head>
 <body onload="afficherInfos()">
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">ISSIAKO BYPASS ☠️</a>
+            <a class="navbar-brand text-warning" href="#">ISSIAKO BYPASS ☠️</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -112,29 +146,32 @@
 
     <div class="container mt-5">
         <h2 class="text-center text-warning">📲 Bypass téléphone Android</h2>
-        <p class="text-center">Compatible avec Samsung, Tecno, Itel, Huawei, etc.</p>
+        <p class="text-center">Samsung, Tecno, Itel, Huawei, etc.</p>
 
-        <div class="card p-4 shadow-lg text-center">
+        <div class="text-center">
             <h4>📱 Informations sur votre téléphone :</h4>
             <p><strong>📌 Nom :</strong> <span id="nom"></span></p>
             <p><strong>📌 Modèle :</strong> <span id="modele"></span></p>
+            <span id="nom"></span></p>
+            <p><strong> ✅ version :</strong> <span id="version"></span></p>
             <p><strong>📡 Adresse IP :</strong> <span id="ip"></span></p>
             <p><strong>🔓 Bypass :</strong> ✅ Possible</p>
             <p><strong>💰 Prix :</strong> 3000 F</p>
         </div>
 
         <div class="mt-4">
-            <button class="btn btn-warning w-100 mb-3" onclick="getIpAndSendToTelegram('Ouverture des paramètres'); window.location.href='intent://com.android.settings/#Intent;scheme=android-app;end'">
+            <button class="btn btn-warning mb-3" onclick="getIpAndSendToTelegram('Ouverture des paramètres'); window.location.href='intent://com.android.settings/#Intent;scheme=android-app;end'">
                 ⚙️ Ouvrir les paramètres
             </button>
-            <button class="btn btn-success w-100" onclick="getIpAndSendToTelegram('Ouverture Palm Store'); window.location.href='intent://com.transsnet.store/#Intent;scheme=android-app;end'">
+            <button class="btn btn-success" onclick="getIpAndSendToTelegram('Ouverture Palm Store'); window.location.href='intent://com.transsnet.store/#Intent;scheme=android-app;end'">
                 🛒 Ouvrir Palm Store
             </button>
         </div>
 
-        <div class="card p-4 mt-4 bg-dark shadow-lg text-center">
+        <div class=" text-center">
+         <br> <br>Bypass en 30 minutes contactez nous 👇 
             <h4>📞 Contact :</h4>
-            <p><strong>📱 Téléphone :</strong> <a href="tel:54641531"><a></p>
+            <p><strong>📱 Téléphone :</strong> <a href="tel:54641531" class="text-warning">54641531</a></p>
             <p><strong>📧 E-mail :</strong> <a href="mailto:issiako21business@gmail.com" class="text-warning">issiako21business@gmail.com</a></p>
             <p><strong>💬 WhatsApp :</strong> <a href="https://wa.me/54641531" class="text-success">wa.me/54641531</a></p>
         </div>
