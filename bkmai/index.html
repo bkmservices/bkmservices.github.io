@@ -156,7 +156,7 @@
 <body>
   <div class="chat-container">
     <div class="header">
-      <h1>William IA</h1>
+      <h1>William IA 🤖</h1>
       <button id="aboutButton" onclick="showAbout()">À propos</button>
     </div>
     <div class="chat-box-container">
@@ -165,14 +165,14 @@
     <div class="message-input-container">
       <input type="text" id="userMessage" placeholder="Tapez un message...">
       <button id="sendButton" onclick="sendMessage()">Envoyer</button>
-      <button id="voiceToggleButton" onclick="toggleVoice()">Voix</button>
+      <button id="voiceToggleButton" onclick="toggleVoice()">🔊</button>
     </div>
   </div>
 
   <div class="about-modal" id="aboutModal">
     <div class="modal-content">
       <span class="close-button" onclick="closeAbout()">&times;</span>
-      <h2>À propos de l'application</h2>
+      <h2>À propos ℹ️</h2>
       <p>Cet assistant virtuel est conçu pour répondre à vos questions, discuter et vous assister dans diverses tâches. Essayez-le et obtenez des réponses instantanées!</p>
     </div>
   </div>
@@ -199,7 +199,7 @@
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
-            alert("Réponse copiée !");
+            
         }).catch(err => {
             console.error("Erreur lors de la copie :", err);
         });
@@ -210,12 +210,12 @@
         const chatId = localStorage.getItem('chatId'); 
         
         if (!chatId) {
-            alert('Chat ID non trouvé, veuillez recharger la page.');
+            
             return;
         }
         
         if (userMessage.trim() === "") {
-            alert("Veuillez entrer un message.");
+            
             return;
         }
 
@@ -228,7 +228,7 @@
                 const formattedResponse = formatMarkdown(data.response);
                 const botMessage = `
                     <div class="bot-message">
-                        William IA: ${formattedResponse}
+                        William IA🤖: ${formattedResponse}
                         <button class="copy-btn" onclick="copyToClipboard('${data.response.replace(/'/g, "\\'")}')">Copier</button>
                     </div>
                 `;
