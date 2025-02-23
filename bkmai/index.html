@@ -1,226 +1,345 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>William AI - Chat</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            background-color: #343a40;
-            color: white;
-            padding: 20px;
-            position: fixed;
-            left: -260px;
-            transition: 0.3s;
-            z-index: 1000;
-        }
-        .sidebar h3 {
-            text-align: center;
-        }
-        .sidebar a {
-            color: white;
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #575757;
-        }
-        .menu-btn {
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 1001;
-        }
-        .chat-container {
-            flex: 1;
-            padding: 20px;
-            width: 100%;
-            margin-left: 0;
-            transition: 0.3s;
-        }
-        #chatBox {
-            height: 400px;
-            overflow-y: auto;
-            padding: 10px;
-            background-color: #e9ecef;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-        .user-message {
-            color: #007bff;
-            font-weight: bold;
-        }
-        .bot-message {
-            color: #28a745;
-            background-color: #d4edda;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
-        .copy-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-            padding: 5px;
-        }
-        .input-container {
-            display: flex;
-            gap: 10px;
-        }
-        .input-container input {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .input-container button {
-            padding: 10px;
-            border-radius: 4px;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        #sendButton {
-            background-color: #007bff;
-        }
-        #sendButton:hover {
-            background-color: #0056b3;
-        }
-        #voiceButton {
-            background-color: #ff5733;
-        }
-        #voiceButton:hover {
-            background-color: #c44120;
-        }
-        /* Mobile Responsive */
-        @media screen and (max-width: 768px) {
-            .chat-container {
-                padding: 10px;
-            }
-            .input-container {
-                flex-direction: column;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot IA</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9a8f5c7f971eb1b8006db3c9cbfa08cc16ccf5cabe7d2f0aaf7dcd92eab23976" crossorigin="anonymous">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+    }
+
+    .chat-container {
+      width: 380px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+      margin-top: 50px;
+    }
+
+    .header {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 18px;
+    }
+
+    /* Style du menu qui s'ouvre */
+    .menu-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    .menu-container {
+      display: none;
+      position: absolute;
+      top: 50px;
+      left: 15px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      width: 150px;
+    }
+
+    .menu-container div {
+      padding: 10px;
+      cursor: pointer;
+      color: #4CAF50;
+    }
+
+    .menu-container div:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Pour la photo qui apparaît */
+    .photo-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .photo-container img {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      animation: fadeOut 3s forwards;
+    }
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        display: none;
+      }
+    }
+
+    .chat-box-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .messages-container {
+      max-height: 100%;
+      overflow-y: auto;
+    }
+
+    .user-message, .bot-message {
+      background-color: #e4f0e6;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      max-width: 80%;
+    }
+
+    .bot-message {
+      background-color: #f0f0f0;
+      margin-left: auto;
+    }
+
+    .message-input-container {
+      display: flex;
+      padding: 10px;
+      background-color: #f1f1f1;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    #userMessage {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      margin-right: 10px;
+    }
+
+    #sendButton, #voiceToggleButton {
+      margin-left: 5px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 5px;
+    }
+
+    #sendButton:hover, #voiceToggleButton:hover {
+      background-color: #45a049;
+    }
+
+    .copy-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .copy-btn:hover {
+      background-color: #45a049;
+    }
+
+    /* Modal Style */
+    .about-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .close-button {
+      font-size: 30px;
+      color: #333;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .close-button:hover {
+      color: #f44336;
+    }
+  </style>
 </head>
 <body>
+  <div class="photo-container" id="photoContainer">
+    <img src="https://via.placeholder.com/200" alt="Photo">
+  </div>
 
-<!-- Bouton pour ouvrir le menu -->
-<button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
-
-<!-- Barre latérale -->
-<div class="sidebar" id="sidebar">
-    <h3>William AI</h3>
-    <a href="#">À propos</a>
-    <a href="#">Développé par BOKOUM ISSIAKA</a>
-    <a href="mailto:issiako21business@gmail.com">E-mail : issiako21business@gmail.com</a>
-    <a href="https://wa.me/22654641531">WhatsApp : 22654641531</a>
-</div>
-
-<!-- Chat Container -->
-<div class="chat-container">
-    <h3>Conversation avec William AI</h3>
-    <div id="chatBox"></div>
-
-    <div class="input-container">
-        <input type="text" id="userMessage" placeholder="Votre message..." />
-        <button id="sendButton" onclick="sendMessage()">Envoyer</button>
-        <button id="voiceButton" onclick="startVoiceRecognition()">🎤</button>
+  <div class="chat-container">
+    <div class="header">
+      <h1>Chat avec William IA</h1>
+      <span class="menu-btn" onclick="toggleMenu()">☰</span>
+      <div class="menu-container" id="menuContainer">
+        <div id="deleteMessages" onclick="clearMessages()">Supprimer les messages</div>
+        <div onclick="searchMessages()">Recherche</div>
+        <div id="aboutButton" onclick="showAbout()">À propos</div>
+      </div>
     </div>
-    <div>
-        <input type="checkbox" id="speechToggle" checked> Lire les réponses à haute voix
+    <div class="chat-box-container">
+      <div class="messages-container" id="chatBox"></div>
     </div>
-</div>
+    <div class="message-input-container">
+      <input type="text" id="userMessage" placeholder="Tapez un message...">
+      <button id="sendButton" onclick="sendMessage()">Envoyer</button>
+      <button id="voiceToggleButton" onclick="toggleVoice()">Voix</button>
+    </div>
+  </div>
 
-<!-- Script -->
-<script>
-    let synth = window.speechSynthesis;
+  <div class="about-modal" id="aboutModal">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeAbout()">&times;</span>
+      <h2>À propos de l'application</h2>
+      <p>Cet assistant virtuel est conçu pour répondre à vos questions, discuter et vous assister dans diverses tâches. Essayez-le et obtenez des réponses instantanées!</p>
+    </div>
+  </div>
+
+  <script>
+    let voiceEnabled = false;
+    let chatMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+
+    // Photo qui apparaît au démarrage
+    setTimeout(() => {
+      document.getElementById('photoContainer').style.display = 'none';
+    }, 3000); 
 
     function toggleMenu() {
-        let sidebar = document.getElementById("sidebar");
-        if (sidebar.style.left === "0px") {
-            sidebar.style.left = "-260px";
-        } else {
-            sidebar.style.left = "0px";
-        }
+      const menu = document.getElementById('menuContainer');
+      menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
     }
 
     function sendMessage() {
-        const userMessage = document.getElementById('userMessage').value;
+      const userMessage = document.getElementById('userMessage').value;
+      const chatId = localStorage.getItem('chatId'); 
+      
+      if (!chatId) {
+        alert('Chat ID non trouvé, veuillez recharger la page.');
+        return;
+      }
+      
+      if (userMessage.trim() === "") {
+        alert("Veuillez entrer un message.");
+        return;
+      }
+
+      document.getElementById('chatBox').innerHTML += `<div class="user-message">Vous: ${userMessage}</div>`;
+      document.getElementById('userMessage').value = '';
+      // Enregistrer le message dans le localStorage
+      chatMessages.push({ user: 'Vous', message: userMessage });
+      localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
+
+      // Générer la réponse du bot
+      setTimeout(() => {
+        const botResponse = `Bot: Je suis en train de réfléchir à cela...`;
+        document.getElementById('chatBox').innerHTML += `<div class="bot-message">${botResponse}</div>`;
         
-        if (userMessage.trim() === "") {
-            alert("Veuillez entrer un message.");
-            return;
+        // Enregistrer la réponse du bot
+        chatMessages.push({ user: 'Bot', message: botResponse });
+        localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
+
+        // Faire défiler les messages vers le bas
+        document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
+      }, 1000);
+    }
+
+    function clearMessages() {
+      if (confirm("Êtes-vous sûr de vouloir supprimer tous les messages ?")) {
+        localStorage.removeItem('chatMessages');
+        document.getElementById('chatBox').innerHTML = '';  // Vider l'affichage des messages
+        chatMessages = [];
+      }
+    }
+
+    function searchMessages() {
+      const query = prompt("Entrez un terme à rechercher dans les messages:");
+      if (query) {
+        const results = chatMessages.filter(msg => msg.message.includes(query));
+        if (results.length > 0) {
+          alert(`Messages trouvés: ${results.map(msg => msg.message).join('\n')}`);
+        } else {
+          alert("Aucun message trouvé.");
         }
-
-        document.getElementById('chatBox').innerHTML += `<div class="user-message">Vous: ${userMessage}</div>`;
-        document.getElementById('userMessage').value = '';
-
-        fetch(`https://bkmai.pythonanywhere.com/WILLIAM?q=${encodeURIComponent(userMessage)}`)
-            .then(response => response.json())
-            .then(data => {
-                const botMessage = `
-                    <div class="bot-message">
-                        William AI: ${data.response}
-                        <button class="copy-btn" onclick="copyToClipboard('${data.response.replace(/'/g, "\\'")}')">Copier</button>
-                    </div>
-                `;
-
-                document.getElementById('chatBox').innerHTML += botMessage;
-                document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
-
-                if (document.getElementById('speechToggle').checked) {
-                    speakResponse(data.response);
-                }
-            })
-            .catch(error => console.error('Erreur lors de l\'envoi du message:', error));
+      }
     }
 
-    function speakResponse(text) {
-        let utterance = new SpeechSynthesisUtterance(text);
-        synth.speak(utterance);
+    function showAbout() {
+      document.getElementById('aboutModal').style.display = 'flex';
     }
 
-    function startVoiceRecognition() {
-        let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'fr-FR';
-        recognition.start();
-
-        recognition.onresult = function(event) {
-            let transcript = event.results[0][0].transcript;
-            document.getElementById('userMessage').value = transcript;
-            sendMessage();
-        };
-
-        recognition.onerror = function(event) {
-            alert("Erreur de reconnaissance vocale : " + event.error);
-        };
+    function closeAbout() {
+      document.getElementById('aboutModal').style.display = 'none';
     }
-</script>
 
+    // Afficher les messages enregistrés au démarrage
+    window.onload = function() {
+      chatMessages.forEach(msg => {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add(msg.user === 'Vous' ? 'user-message' : 'bot-message');
+        messageDiv.innerHTML = `${msg.user}: ${msg.message}`;
+        document.getElementById('chatBox').appendChild(messageDiv);
+      });
+
+      // Faire défiler vers le bas
+      document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
+    }
+
+    function toggleVoice() {
+      voiceEnabled = !voiceEnabled;
+      alert(`La voix est maintenant ${voiceEnabled ? 'activée' : 'désactivée'}.`);
+    }
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zyz/yIIE6ZJ5w5Lqpyf6kqv6b5o6MZpIk+H7l45J" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-HBz7Cfdj59wv6kZ5B6dPCEgNhZTfwABX+31BZv/U98FrL4P4m9b1U6fUANpKDbZg" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0dpYmcSS5fJY7p9XYhsr4ZrhMI60SvAqLz1f9vKNk42HTj7r8" crossorigin="anonymous"></script>
 </body>
 </html>
