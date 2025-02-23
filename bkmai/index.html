@@ -5,28 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>William AI - Chat</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
-        .navbar {
+        .sidebar {
+            width: 250px;
+            height: 100vh;
             background-color: #343a40;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            left: -260px;
+            transition: 0.3s;
+            z-index: 1000;
         }
-        .navbar a {
-            color: #ffffff;
-            padding: 10px 15px;
+        .sidebar h3 {
+            text-align: center;
         }
-        .navbar a:hover {
+        .sidebar a {
+            color: white;
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
             background-color: #575757;
         }
+        .menu-btn {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
         .chat-container {
+            flex: 1;
             padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin-left: 0;
+            transition: 0.3s;
         }
         #chatBox {
             height: 400px;
@@ -42,31 +72,26 @@
         }
         .bot-message {
             color: #28a745;
-            margin-top: 5px;
-            padding: 10px;
             background-color: #d4edda;
+            padding: 10px;
             border-radius: 5px;
+            margin-top: 5px;
         }
         .copy-btn {
-            display: block;
-            margin-top: 5px;
-            padding: 5px;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 3px;
             cursor: pointer;
             font-size: 12px;
-        }
-        .copy-btn:hover {
-            background-color: #0056b3;
+            padding: 5px;
         }
         .input-container {
             display: flex;
-            justify-content: space-between;
+            gap: 10px;
         }
         .input-container input {
-            width: 80%;
+            flex: 1;
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
@@ -74,83 +99,78 @@
         }
         .input-container button {
             padding: 10px;
-            background-color: #007bff;
+            border-radius: 4px;
             color: white;
             border: none;
-            border-radius: 4px;
+            cursor: pointer;
         }
-        .input-container button:hover {
+        #sendButton {
+            background-color: #007bff;
+        }
+        #sendButton:hover {
             background-color: #0056b3;
+        }
+        #voiceButton {
+            background-color: #ff5733;
+        }
+        #voiceButton:hover {
+            background-color: #c44120;
+        }
+        /* Mobile Responsive */
+        @media screen and (max-width: 768px) {
+            .chat-container {
+                padding: 10px;
+            }
+            .input-container {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- Barre de navigation -->
-<nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="#">William AI</a>
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#">À propos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Contact</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+<!-- Bouton pour ouvrir le menu -->
+<button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
 
-<!-- Container de la conversation -->
-<div class="chat-container mt-4">
+<!-- Barre latérale -->
+<div class="sidebar" id="sidebar">
+    <h3>William AI</h3>
+    <a href="#">À propos</a>
+    <a href="#">Développé par BOKOUM ISSIAKA</a>
+    <a href="mailto:issiako21business@gmail.com">E-mail : issiako21business@gmail.com</a>
+    <a href="https://wa.me/22654641531">WhatsApp : 22654641531</a>
+</div>
+
+<!-- Chat Container -->
+<div class="chat-container">
     <h3>Conversation avec William AI</h3>
     <div id="chatBox"></div>
 
     <div class="input-container">
         <input type="text" id="userMessage" placeholder="Votre message..." />
-        <button onclick="sendMessage()">Envoyer</button>
+        <button id="sendButton" onclick="sendMessage()">Envoyer</button>
+        <button id="voiceButton" onclick="startVoiceRecognition()">🎤</button>
+    </div>
+    <div>
+        <input type="checkbox" id="speechToggle" checked> Lire les réponses à haute voix
     </div>
 </div>
 
 <!-- Script -->
 <script>
-    // Fonction pour générer un chatId unique depuis l'API Flask
-    function generateChatId() {
-        fetch('https://bkmai.pythonanywhere.com/generateChatId')  
-            .then(response => response.json())
-            .then(data => {
-                const chatId = data.chatId;
-                localStorage.setItem('chatId', chatId);
-            })
-            .catch(error => console.error('Erreur lors de la génération du Chat ID:', error));
+    let synth = window.speechSynthesis;
+
+    function toggleMenu() {
+        let sidebar = document.getElementById("sidebar");
+        if (sidebar.style.left === "0px") {
+            sidebar.style.left = "-260px";
+        } else {
+            sidebar.style.left = "0px";
+        }
     }
 
-    // Fonction pour formater le texte (interprétation des **gras**, *italique*, etc.)
-    function formatMarkdown(text) {
-        text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // Gras
-        text = text.replace(/\*(.*?)\*/g, '<i>$1</i>'); // Italique
-        text = text.replace(/\+ (.*?) \+/g, '<ul><li>$1</li></ul>'); // Liste
-        return text;
-    }
-
-    // Fonction pour copier la réponse
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            alert("Réponse copiée !");
-        }).catch(err => {
-            console.error("Erreur lors de la copie :", err);
-        });
-    }
-
-    // Fonction pour envoyer un message au serveur
     function sendMessage() {
         const userMessage = document.getElementById('userMessage').value;
-        const chatId = localStorage.getItem('chatId'); 
-        
-        if (!chatId) {
-            alert('Chat ID non trouvé, veuillez recharger la page.');
-            return;
-        }
         
         if (userMessage.trim() === "") {
             alert("Veuillez entrer un message.");
@@ -158,29 +178,47 @@
         }
 
         document.getElementById('chatBox').innerHTML += `<div class="user-message">Vous: ${userMessage}</div>`;
-        document.getElementById('userMessage').value = ''; // Réinitialiser le champ de texte
+        document.getElementById('userMessage').value = '';
 
-        fetch(`https://bkmai.pythonanywhere.com/WILLIAM?q=${encodeURIComponent(userMessage)}&userId=${encodeURIComponent(chatId)}`)
+        fetch(`https://bkmai.pythonanywhere.com/WILLIAM?q=${encodeURIComponent(userMessage)}`)
             .then(response => response.json())
             .then(data => {
-                const formattedResponse = formatMarkdown(data.response);
-
                 const botMessage = `
                     <div class="bot-message">
-                        William AI: ${formattedResponse}
+                        William AI: ${data.response}
                         <button class="copy-btn" onclick="copyToClipboard('${data.response.replace(/'/g, "\\'")}')">Copier</button>
                     </div>
                 `;
 
                 document.getElementById('chatBox').innerHTML += botMessage;
                 document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
+
+                if (document.getElementById('speechToggle').checked) {
+                    speakResponse(data.response);
+                }
             })
             .catch(error => console.error('Erreur lors de l\'envoi du message:', error));
     }
 
-    // Générer le chatId lors du chargement de la page
-    if (!localStorage.getItem('chatId')) {
-        generateChatId();
+    function speakResponse(text) {
+        let utterance = new SpeechSynthesisUtterance(text);
+        synth.speak(utterance);
+    }
+
+    function startVoiceRecognition() {
+        let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'fr-FR';
+        recognition.start();
+
+        recognition.onresult = function(event) {
+            let transcript = event.results[0][0].transcript;
+            document.getElementById('userMessage').value = transcript;
+            sendMessage();
+        };
+
+        recognition.onerror = function(event) {
+            alert("Erreur de reconnaissance vocale : " + event.error);
+        };
     }
 </script>
 
