@@ -38,9 +38,28 @@
         }
         .user-message {
             color: #007bff;
+            font-weight: bold;
         }
         .bot-message {
             color: #28a745;
+            margin-top: 5px;
+            padding: 10px;
+            background-color: #d4edda;
+            border-radius: 5px;
+        }
+        .copy-btn {
+            display: block;
+            margin-top: 5px;
+            padding: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-btn:hover {
+            background-color: #0056b3;
         }
         .input-container {
             display: flex;
@@ -93,25 +112,40 @@
     </div>
 </div>
 
-<!-- Script pour gérer le chat -->
+<!-- Script -->
 <script>
     // Fonction pour générer un chatId unique depuis l'API Flask
     function generateChatId() {
-        fetch('https://bkmai.pythonanywhere.com/generateChatId')  // Remplacer par l'URL réelle de ta route Flask
+        fetch('https://bkmai.pythonanywhere.com/generateChatId')  
             .then(response => response.json())
             .then(data => {
-                // Enregistrer le chatId dans le localStorage
                 const chatId = data.chatId;
                 localStorage.setItem('chatId', chatId);
-                console.log('Chat ID généré et stocké :', chatId);
             })
             .catch(error => console.error('Erreur lors de la génération du Chat ID:', error));
+    }
+
+    // Fonction pour formater le texte (interprétation des **gras**, *italique*, etc.)
+    function formatMarkdown(text) {
+        text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // Gras
+        text = text.replace(/\*(.*?)\*/g, '<i>$1</i>'); // Italique
+        text = text.replace(/\+ (.*?) \+/g, '<ul><li>$1</li></ul>'); // Liste
+        return text;
+    }
+
+    // Fonction pour copier la réponse
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Réponse copiée !");
+        }).catch(err => {
+            console.error("Erreur lors de la copie :", err);
+        });
     }
 
     // Fonction pour envoyer un message au serveur
     function sendMessage() {
         const userMessage = document.getElementById('userMessage').value;
-        const chatId = localStorage.getItem('chatId');  // Récupérer le chatId depuis le localStorage
+        const chatId = localStorage.getItem('chatId'); 
         
         if (!chatId) {
             alert('Chat ID non trouvé, veuillez recharger la page.');
@@ -123,18 +157,22 @@
             return;
         }
 
-        // Afficher le message utilisateur dans le chat
         document.getElementById('chatBox').innerHTML += `<div class="user-message">Vous: ${userMessage}</div>`;
         document.getElementById('userMessage').value = ''; // Réinitialiser le champ de texte
 
-        // Envoie une requête GET au serveur avec le message et le chatId
-        fetch(`https://bkmai.pythonanywhere.com/thanAI?q=${encodeURIComponent(userMessage)}&userId=${encodeURIComponent(chatId)}`)
+        fetch(`https://bkmai.pythonanywhere.com/WILLIAM?q=${encodeURIComponent(userMessage)}&userId=${encodeURIComponent(chatId)}`)
             .then(response => response.json())
             .then(data => {
-                console.log('Réponse du serveur :', data.response);
-                // Affiche la réponse du bot
-                document.getElementById('chatBox').innerHTML += `<div class="bot-message">William AI: ${data.response}</div>`;
-                // Défilement automatique vers le bas pour montrer la dernière réponse
+                const formattedResponse = formatMarkdown(data.response);
+
+                const botMessage = `
+                    <div class="bot-message">
+                        William AI: ${formattedResponse}
+                        <button class="copy-btn" onclick="copyToClipboard('${data.response.replace(/'/g, "\\'")}')">Copier</button>
+                    </div>
+                `;
+
+                document.getElementById('chatBox').innerHTML += botMessage;
                 document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
             })
             .catch(error => console.error('Erreur lors de l\'envoi du message:', error));
