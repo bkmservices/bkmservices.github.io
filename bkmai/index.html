@@ -4,12 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chatbot IA</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9a8f5c7f971eb1b8006db3c9cbfa08cc16ccf5cabe7d2f0aaf7dcd92eab23976" crossorigin="anonymous">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Arial', sans-serif;
       background-color: #f4f7fc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
     }
 
     .chat-container {
@@ -20,7 +29,6 @@
       display: flex;
       flex-direction: column;
       height: 600px;
-      margin-top: 50px;
     }
 
     .header {
@@ -37,67 +45,22 @@
       font-size: 18px;
     }
 
-    /* Style du menu qui s'ouvre */
-    .menu-btn {
+    .header .menu {
       position: absolute;
       top: 15px;
-      left: 15px;
-      font-size: 20px;
+      right: 15px;
+      font-size: 14px;
+      color: white;
       cursor: pointer;
-      color: #fff;
     }
 
-    .menu-container {
-      display: none;
-      position: absolute;
-      top: 50px;
-      left: 15px;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      padding: 10px;
-      width: 150px;
-    }
-
-    .menu-container div {
-      padding: 10px;
+    .header .menu div {
+      margin: 5px 0;
       cursor: pointer;
-      color: #4CAF50;
     }
 
-    .menu-container div:hover {
-      background-color: #f1f1f1;
-    }
-
-    /* Pour la photo qui apparaît */
-    .photo-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    .photo-container img {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      animation: fadeOut 3s forwards;
-    }
-
-    @keyframes fadeOut {
-      0% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-        display: none;
-      }
+    .header .menu div:hover {
+      color: #ffeb3b;
     }
 
     .chat-box-container {
@@ -210,15 +173,10 @@
   </style>
 </head>
 <body>
-  <div class="photo-container" id="photoContainer">
-    <img src="https://via.placeholder.com/200" alt="Photo">
-  </div>
-
   <div class="chat-container">
     <div class="header">
       <h1>Chat avec William IA</h1>
-      <span class="menu-btn" onclick="toggleMenu()">☰</span>
-      <div class="menu-container" id="menuContainer">
+      <div class="menu">
         <div id="deleteMessages" onclick="clearMessages()">Supprimer les messages</div>
         <div onclick="searchMessages()">Recherche</div>
         <div id="aboutButton" onclick="showAbout()">À propos</div>
@@ -246,100 +204,128 @@
     let voiceEnabled = false;
     let chatMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
 
-    // Photo qui apparaît au démarrage
-    setTimeout(() => {
-      document.getElementById('photoContainer').style.display = 'none';
-    }, 3000); 
+    function generateChatId() {
+        fetch('https://bkmai.pythonanywhere.com/generateChatId')  
+            .then(response => response.json())
+            .then(data => {
+                const chatId = data.chatId;
+                localStorage.setItem('chatId', chatId);
+            })
+            .catch(error => console.error('Erreur lors de la génération du Chat ID:', error));
+    }
 
-    function toggleMenu() {
-      const menu = document.getElementById('menuContainer');
-      menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
+    function formatMarkdown(text) {
+        text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
+        text = text.replace(/\*(.*?)\*/g, '<i>$1</i>'); 
+        text = text.replace(/\+ (.*?) \+/g, '<ul><li>$1</li></ul>'); 
+        return text;
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Réponse copiée !");
+        }).catch(err => {
+            console.error("Erreur lors de la copie :", err);
+        });
     }
 
     function sendMessage() {
-      const userMessage = document.getElementById('userMessage').value;
-      const chatId = localStorage.getItem('chatId'); 
-      
-      if (!chatId) {
-        alert('Chat ID non trouvé, veuillez recharger la page.');
-        return;
-      }
-      
-      if (userMessage.trim() === "") {
-        alert("Veuillez entrer un message.");
-        return;
-      }
-
-      document.getElementById('chatBox').innerHTML += `<div class="user-message">Vous: ${userMessage}</div>`;
-      document.getElementById('userMessage').value = '';
-      // Enregistrer le message dans le localStorage
-      chatMessages.push({ user: 'Vous', message: userMessage });
-      localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
-
-      // Générer la réponse du bot
-      setTimeout(() => {
-        const botResponse = `Bot: Je suis en train de réfléchir à cela...`;
-        document.getElementById('chatBox').innerHTML += `<div class="bot-message">${botResponse}</div>`;
+        const userMessage = document.getElementById('userMessage').value;
+        const chatId = localStorage.getItem('chatId'); 
         
-        // Enregistrer la réponse du bot
-        chatMessages.push({ user: 'Bot', message: botResponse });
-        localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
-
-        // Faire défiler les messages vers le bas
-        document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
-      }, 1000);
-    }
-
-    function clearMessages() {
-      if (confirm("Êtes-vous sûr de vouloir supprimer tous les messages ?")) {
-        localStorage.removeItem('chatMessages');
-        document.getElementById('chatBox').innerHTML = '';  // Vider l'affichage des messages
-        chatMessages = [];
-      }
-    }
-
-    function searchMessages() {
-      const query = prompt("Entrez un terme à rechercher dans les messages:");
-      if (query) {
-        const results = chatMessages.filter(msg => msg.message.includes(query));
-        if (results.length > 0) {
-          alert(`Messages trouvés: ${results.map(msg => msg.message).join('\n')}`);
-        } else {
-          alert("Aucun message trouvé.");
+        if (!chatId) {
+            alert('Chat ID non trouvé, veuillez recharger la page.');
+            return;
         }
-      }
+        
+        if (userMessage.trim() === "") {
+            alert("Veuillez entrer un message.");
+            return;
+        }
+
+        document.getElementById('chatBox').innerHTML += `<div class="user-message">Vous: ${userMessage}</div>`;
+        document.getElementById('userMessage').value = ''; 
+
+        fetch(`https://bkmai.pythonanywhere.com/WILLIAM?q=${encodeURIComponent(userMessage)}&userId=${encodeURIComponent(chatId)}`)
+            .then(response => response.json())
+            .then(data => {
+                const formattedResponse = formatMarkdown(data.response);
+                const botMessage = `
+                    <div class="bot-message">
+                        William IA: ${formattedResponse}
+                        <button class="copy-btn" onclick="copyToClipboard('${data.response.replace(/'/g, "\\'")}')">Copier</button>
+                    </div>
+                `;
+                document.getElementById('chatBox').innerHTML += botMessage;
+                document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
+
+                // Sauvegarder les messages dans le localStorage
+                chatMessages.push({ userMessage, botMessage: formattedResponse });
+                localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
+
+                if (voiceEnabled) {
+                    readMessage(data.response);
+                }
+            })
+            .catch(error => console.error('Erreur lors de l\'envoi du message:', error));
     }
 
-    function showAbout() {
-      document.getElementById('aboutModal').style.display = 'flex';
-    }
+    function startVoice() {
+        let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = "fr-FR";
+        recognition.start();
 
-    function closeAbout() {
-      document.getElementById('aboutModal').style.display = 'none';
-    }
-
-    // Afficher les messages enregistrés au démarrage
-    window.onload = function() {
-      chatMessages.forEach(msg => {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add(msg.user === 'Vous' ? 'user-message' : 'bot-message');
-        messageDiv.innerHTML = `${msg.user}: ${msg.message}`;
-        document.getElementById('chatBox').appendChild(messageDiv);
-      });
-
-      // Faire défiler vers le bas
-      document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
+        recognition.onresult = (event) => {
+            document.getElementById('userMessage').value = event.results[0][0].transcript;
+        };
     }
 
     function toggleVoice() {
-      voiceEnabled = !voiceEnabled;
-      alert(`La voix est maintenant ${voiceEnabled ? 'activée' : 'désactivée'}.`);
+        voiceEnabled = !voiceEnabled;
+        alert(voiceEnabled ? "Lecture activée" : "Lecture désactivée");
     }
-  </script>
 
-  <!-- Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zyz/yIIE6ZJ5w5Lqpyf6kqv6b5o6MZpIk+H7l45J" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-HBz7Cfdj59wv6kZ5B6dPCEgNhZTfwABX+31BZv/U98FrL4P4m9b1U6fUANpKDbZg" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0dpYmcSS5fJY7p9XYhsr4ZrhMI60SvAqLz1f9vKNk42HTj7r8" crossorigin="anonymous"></script>
+    function readMessage(text) {
+        let speech = new SpeechSynthesisUtterance(text);
+        speech.lang = "fr-FR";
+        window.speechSynthesis.speak(speech);
+    }
+
+    if (!localStorage.getItem('chatId')) {
+        generateChatId();
+    }
+
+    function showAbout() {
+        document.getElementById('aboutModal').style.display = 'flex';
+    }
+
+    function closeAbout() {
+        document.getElementById('aboutModal').style.display = 'none';
+    }
+
+    function clearMessages() {
+        localStorage.removeItem('chatMessages');
+        chatMessages = [];
+        document.getElementById('chatBox').innerHTML = '';
+    }
+
+    function searchMessages() {
+        const searchTerm = prompt("Entrez votre terme de recherche:");
+        if (searchTerm) {
+            const results = chatMessages.filter(msg => msg.userMessage.includes(searchTerm) || msg.botMessage.includes(searchTerm));
+            document.getElementById('chatBox').innerHTML = '';
+            results.forEach(msg => {
+                document.getElementById('chatBox').innerHTML += `<div class="user-message">Vous: ${msg.userMessage}</div>
+                                                                <div class="bot-message">William IA: ${msg.botMessage}</div>`;
+            });
+        }
+    }
+
+    // Charger les conversations au démarrage
+    chatMessages.forEach(msg => {
+        document.getElementById('chatBox').innerHTML += `<div class="user-message">Vous: ${msg.userMessage}</div>
+                                                        <div class="bot-message">William IA: ${msg.botMessage}</div>`;
+    });
+  </script>
 </body>
 </html>
