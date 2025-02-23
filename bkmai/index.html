@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>William AI - Chat</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar a {
+            color: #ffffff;
+            padding: 10px 15px;
+        }
+        .navbar a:hover {
+            background-color: #575757;
+        }
+        .chat-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #chatBox {
+            height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .user-message {
+            color: #007bff;
+        }
+        .bot-message {
+            color: #28a745;
+        }
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .input-container input {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .input-container button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        .input-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Barre de navigation -->
+<nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="#">William AI</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">À propos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Contact</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Container de la conversation -->
+<div class="chat-container mt-4">
+    <h3>Conversation avec William AI</h3>
+    <div id="chatBox"></div>
+
+    <div class="input-container">
+        <input type="text" id="userMessage" placeholder="Votre message..." />
+        <button onclick="sendMessage()">Envoyer</button>
+    </div>
+</div>
+
+<!-- Script pour gérer le chat -->
+<script>
+    // Fonction pour générer un chatId unique depuis l'API Flask
+    function generateChatId() {
+        fetch('https://bkmai.pythonanywhere.com/generateChatId')  // Remplacer par l'URL réelle de ta route Flask
+            .then(response => response.json())
+            .then(data => {
+                // Enregistrer le chatId dans le localStorage
+                const chatId = data.chatId;
+                localStorage.setItem('chatId', chatId);
+                console.log('Chat ID généré et stocké :', chatId);
+            })
+            .catch(error => console.error('Erreur lors de la génération du Chat ID:', error));
+    }
+
+    // Fonction pour envoyer un message au serveur
+    function sendMessage() {
+        const userMessage = document.getElementById('userMessage').value;
+        const chatId = localStorage.getItem('chatId');  // Récupérer le chatId depuis le localStorage
+        
+        if (!chatId) {
+            alert('Chat ID non trouvé, veuillez recharger la page.');
+            return;
+        }
+        
+        if (userMessage.trim() === "") {
+            alert("Veuillez entrer un message.");
+            return;
+        }
+
+        // Afficher le message utilisateur dans le chat
+        document.getElementById('chatBox').innerHTML += `<div class="user-message">Vous: ${userMessage}</div>`;
+        document.getElementById('userMessage').value = ''; // Réinitialiser le champ de texte
+
+        // Envoie une requête GET au serveur avec le message et le chatId
+        fetch(`https://bkmai.pythonanywhere.com/thanAI?q=${encodeURIComponent(userMessage)}&userId=${encodeURIComponent(chatId)}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Réponse du serveur :', data.response);
+                // Affiche la réponse du bot
+                document.getElementById('chatBox').innerHTML += `<div class="bot-message">William AI: ${data.response}</div>`;
+                // Défilement automatique vers le bas pour montrer la dernière réponse
+                document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
+            })
+            .catch(error => console.error('Erreur lors de l\'envoi du message:', error));
+    }
+
+    // Générer le chatId lors du chargement de la page
+    if (!localStorage.getItem('chatId')) {
+        generateChatId();
+    }
+</script>
+
+</body>
+</html>
