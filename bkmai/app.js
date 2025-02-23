@@ -40,7 +40,7 @@ function sendMessage() {
             chatBox.innerHTML += `
                 <div class="message bot">
                     ${formattedResponse}
-                    <button class="copy-btn" onclick="copyToClipboard('${data.response.replace(/'/g, "\\'")}')">Copier</button>
+                    <button class="copy-btn" onclick="copyToClipboard('${data.response.replace(/'/g, "\\'")}')"></button>
                 </div>
             `;
             chatBox.scrollTop = chatBox.scrollHeight;
