@@ -17,15 +17,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      height: 90vh;
     }
 
     .chat-container {
-      width: 380px;
+      width: 360px;
       background-color: #fff;
       border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
       height: 600px;
@@ -34,42 +33,35 @@
     .header {
       background-color: #4CAF50;
       color: #fff;
-      padding: 15px;
+      padding: 9px;
       text-align: center;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
-      position: relative;
     }
 
     .header h1 {
       font-size: 18px;
     }
 
-    .header .menu {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      font-size: 14px;
+    button {
+      background-color: #4CAF50;
       color: white;
+      border: none;
+      padding: 10px;
       cursor: pointer;
+      font-size: 14px;
+      border-radius: 5px;
     }
 
-    .header .menu div {
-      margin: 5px 0;
-      cursor: pointer;
-    }
-
-    .header .menu div:hover {
-      color: #ffeb3b;
+    button:hover {
+      background-color: #45a049;
     }
 
     .chat-box-container {
       flex: 1;
       overflow-y: auto;
-      padding: 15px;
+      padding: 10px;
       background-color: #f9f9f9;
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
     }
 
     .messages-container {
@@ -109,17 +101,6 @@
 
     #sendButton, #voiceToggleButton {
       margin-left: 5px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-      font-size: 14px;
-      border-radius: 5px;
-    }
-
-    #sendButton:hover, #voiceToggleButton:hover {
-      background-color: #45a049;
     }
 
     .copy-btn {
@@ -175,12 +156,8 @@
 <body>
   <div class="chat-container">
     <div class="header">
-      <h1>Chat avec William IA</h1>
-      <div class="menu">
-        <div id="deleteMessages" onclick="clearMessages()">Supprimer les messages</div>
-        <div onclick="searchMessages()">Recherche</div>
-        <div id="aboutButton" onclick="showAbout()">À propos</div>
-      </div>
+      <h1>William IA</h1>
+      <button id="aboutButton" onclick="showAbout()">À propos</button>
     </div>
     <div class="chat-box-container">
       <div class="messages-container" id="chatBox"></div>
@@ -202,7 +179,6 @@
 
   <script>
     let voiceEnabled = false;
-    let chatMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
 
     function generateChatId() {
         fetch('https://bkmai.pythonanywhere.com/generateChatId')  
@@ -259,10 +235,6 @@
                 document.getElementById('chatBox').innerHTML += botMessage;
                 document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
 
-                // Sauvegarder les messages dans le localStorage
-                chatMessages.push({ userMessage, botMessage: formattedResponse });
-                localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
-
                 if (voiceEnabled) {
                     readMessage(data.response);
                 }
@@ -295,37 +267,15 @@
         generateChatId();
     }
 
+    // Show the "About" modal
     function showAbout() {
         document.getElementById('aboutModal').style.display = 'flex';
     }
 
+    // Close the "About" modal
     function closeAbout() {
         document.getElementById('aboutModal').style.display = 'none';
     }
-
-    function clearMessages() {
-        localStorage.removeItem('chatMessages');
-        chatMessages = [];
-        document.getElementById('chatBox').innerHTML = '';
-    }
-
-    function searchMessages() {
-        const searchTerm = prompt("Entrez votre terme de recherche:");
-        if (searchTerm) {
-            const results = chatMessages.filter(msg => msg.userMessage.includes(searchTerm) || msg.botMessage.includes(searchTerm));
-            document.getElementById('chatBox').innerHTML = '';
-            results.forEach(msg => {
-                document.getElementById('chatBox').innerHTML += `<div class="user-message">Vous: ${msg.userMessage}</div>
-                                                                <div class="bot-message">William IA: ${msg.botMessage}</div>`;
-            });
-        }
-    }
-
-    // Charger les conversations au démarrage
-    chatMessages.forEach(msg => {
-        document.getElementById('chatBox').innerHTML += `<div class="user-message">Vous: ${msg.userMessage}</div>
-                                                        <div class="bot-message">William IA: ${msg.botMessage}</div>`;
-    });
   </script>
 </body>
 </html>
