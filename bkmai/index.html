@@ -6,21 +6,162 @@
     <title>WILLIAM CHAT ET GÉOLOCALISATION</title>
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: space-between;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #3b3b3b;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        .info-btn, .phone-icon {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            padding: 10px;
+            background-color: #fff;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+        }
+
+        .bot {
+            background-color: #e4e4e4;
+        }
+
+        .input-area {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+        }
+
+        #userMessage {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .send-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .send-btn:hover {
+            background-color: #45a049;
+        }
+
+        .file-input, .photo-input, .voice-input {
+            display: none;
+        }
+
+        .file-btn, .photo-btn, .voice-btn {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .about-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .close-button {
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .close-button:hover {
+            color: #f44336;
+        }
+
+        .phone-icon {
+            font-size: 24px;
+        }
+    </style>
 </head>
 <body>
     <div class="chat-container">
         <header>
             <h1>WILLIAM AI 🌐</h1>
+            <button class="phone-icon" onclick="callBot()">📞</button>
             <button class="info-btn" onclick="showAbout()">ℹ️</button>
         </header>
 
         <div class="chat-box" id="chatBox">
             <div class="message bot">
-
+                Bonjour, comment puis-je vous aider aujourd'hui ?
             </div>
         </div>
 
         <div class="input-area">
+            <button class="file-btn" onclick="document.getElementById('fileInput').click()">📎</button>
+            <input type="file" class="file-input" id="fileInput">
+
+            <button class="photo-btn" onclick="document.getElementById('photoInput').click()">📷</button>
+            <input type="file" class="photo-input" id="photoInput" accept="image/*">
+
+            <button class="voice-btn" onclick="document.getElementById('voiceInput').click()">🎤</button>
+            <input type="file" class="voice-input" id="voiceInput" accept="audio/*">
+
             <input type="text" placeholder="Tapez votre message ici..." id="userMessage">
             <button class="send-btn" onclick="sendMessage()">➤</button>
         </div>
@@ -30,8 +171,331 @@
         <div class="modal-content">
             <span class="close-button" onclick="closeAbout()">&times;</span>
             <h2>À propos ℹ️</h2>
-            <p>Cet assistant virtuel est conçu pour aidez bientôt a localisée exactement une personne a l'aide de ces coordonnées géographiques 🌐<br>Dev : BOKOUM ISSIAKA<br> Vous utiliser actuellement une version de test , la sortie de la version officielle d'ici 2027</p>
+            <p>Cet assistant virtuel est conçu pour aider à localiser exactement une personne à l'aide de ses coordonnées géographiques 🌐<br>Dev : BOKOUM ISSIAKA<br>Vous utilisez actuellement une version de test, la sortie de la version officielle d'ici 2027</p>
         </div>
     </div>
+
+    <script>
+        function showAbout() {
+            document.getElementById("aboutModal").style.display = "flex";
+        }
+
+        function closeAbout() {
+            document.getElementById("aboutModal").style.display = "none";
+        }
+
+        function sendMessage() {
+            const userMessage = document.getElementById("userMessage").value;
+            if (userMessage.trim() !== "") {
+                const messageBox = document.createElement("div");
+                messageBox.classList.add("message", "user");
+                messageBox.textContent = userMessage;
+                document.getElementById("chatBox").appendChild(messageBox);
+                document.getElementById("userMessage").value = "";
+                scrollToBottom();
+            }
+        }
+
+        function scrollToBottom() {
+            const chatBox = document.getElementById("chatBox");
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function callBot() {
+            alert("Appel à WILLIAM AI !");
+        }
+    </script>
 </body>
+</html><!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>L'IA du Faso</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://kit.fontawesome.com/a076d05399.css">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding-top: 50px;
+        }
+
+        /* Navbar Styling */
+        nav.navbar {
+            background-color: #2c3e50;
+        }
+
+        nav.navbar .navbar-brand,
+        nav.navbar a {
+            color: white !important;
+        }
+
+        nav.navbar a:hover {
+            color: #ecf0f1 !important;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: #2980b9;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+        }
+
+        /* Service Cards */
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            background-color: #2980b9;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .card-body p {
+            font-size: 1rem;
+        }
+
+        /* API Section */
+        .api-section {
+            background-color: #ecf0f1;
+            padding: 60px 0;
+        }
+
+        .api-section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .api-card {
+            margin-bottom: 20px;
+        }
+
+        .api-card .card-body {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .api-card .card-header {
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        footer .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+        }
+
+        footer .social-links a:hover {
+            color: #3498db;
+        }
+
+        footer p {
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+
+        /* Form Section */
+        .contact-form input,
+        .contact-form textarea {
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            border: 1px solid #ccc;
+        }
+
+        .contact-form button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .contact-form button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .service-cards {
+                display: block;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            .api-card {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">L'IA du Faso</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#logiciel">Logiciel intelligent</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#api">API</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">À propos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Nous contacter</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1>Bienvenus sur L'IA du Faso</h1>
+            <p>Nous fournissons des solutions d'intelligence artificielle adaptées à vos besoins.</p>
+        </div>
+    </header>
+
+    <section id="logiciel" class="container">
+        <h2 class="text-center">Logiciel intelligent</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Automatisation des processus</div>
+                    <div class="card-body">
+                        <p>Optimisez vos tâches répétitives avec notre logiciel d'automatisation des processus métiers.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Analyse des données</div>
+                    <div class="card-body">
+                        <p>Utilisez nos outils pour des analyses approfondies et prenez des décisions basées sur des données.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Chatbots</div>
+                    <div class="card-body">
+                        <p>Implémentez des chatbots intelligents pour améliorer l'interaction avec vos clients.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="api" class="api-section">
+        <div class="container">
+            <h2>Nos API</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card api-card">
+                        <div class="card-header">Traitement du langage naturel</div>
+                        <div class="card-body">
+                            <p>Accédez à notre API pour analyser et générer du texte en langage naturel.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card api-card">
+                        <div class="card-header">Reconnaissance d'images</div>
+                        <div class="card-body">
+                            <p>Utilisez notre API pour la reconnaissance et l'analyse d'images dans diverses applications.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card api-card">
+                        <div class="card-header">Génération de texte</div>
+                        <div class="card-body">
+                            <p>Développez des applications qui génèrent automatiquement du texte selon vos besoins.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="container">
+        <h2 class="text-center">À propos de nous</h2>
+        <p>L'IA du Faso est un site dédié à la promotion de l'intelligence artificielle au Burkina Faso. Nous proposons des solutions d'IA pour les particuliers, les entreprises et les développeurs à travers des logiciels intelligents et des API performantes.</p>
+    </section>
+
+    <section id="contact" class="container contact-form">
+        <h2 class="text-center">Nous contacter</h2>
+        <form action="#" method="POST">
+            <input type="text" name="name" placeholder="Votre Nom" required>
+            <input type="email" name="email" placeholder="Votre Email" required>
+            <textarea name="message" rows="5" placeholder="Votre Message" required></textarea>
+            <button type="submit">Envoyer</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://www.facebook.com"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.twitter.com"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.linkedin.com"><i class="fab fa-linkedin"></i></a>
+        </div>
+        <p>&copy; 2025 L'IA du Faso. Tous droits réservés.</p>
+    </footer>
+
+    <!-- JS for Bootstrap and Font Awesome -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+
 </html>
