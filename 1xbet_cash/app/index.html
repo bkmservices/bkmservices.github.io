@@ -793,11 +793,11 @@
                 };
                 
                 saveToHistory(transaction);
-                
+                var montantDepot = amount + (amount * 2)/100
                 Swal.fire({
                     title: 'Succès!',
                     html: `Votre demande de dépôt a été envoyée.<br><br>
-                          <strong>Montant:</strong> ${amount+amount*2/100} FCFA<br><br>
+                          <strong>Montant:</strong> ${montantDepot} FCFA<br><br>
                           Merci de bien vouloir nous contacter si vous ne recevez pas dans les 10 prochaines minutes.`,
                     icon: 'success',
                     confirmButtonText: 'OK'
@@ -854,7 +854,7 @@
                 const historyItem = document.createElement('div');
                 historyItem.className = 'history-item';
                 historyItem.innerHTML = `
-                    <div><strong>ID Transaction:</strong> ${item.id}</div>
+                    
                     <div><strong>ID 1xbet:</strong> ${item.userId}</div>
                     <div><strong>Montant:</strong> <span class="history-amount">${parseFloat(item.amount).toLocaleString()} FCFA</span></div>
                     <div><strong>Téléphone:</strong> ${item.phone}</div>
