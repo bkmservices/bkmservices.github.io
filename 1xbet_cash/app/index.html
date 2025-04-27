@@ -656,4 +656,306 @@
             
             if (!userId) {
                 Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Veuillez entrer votre ID 1xbet',
+                });
+                return;
+            }
+            
+            if (!amount || parseFloat(amount) <= 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Veuillez entrer un montant valide',
+                });
+                return;
+            }
+            
+            if (!phone) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Veuillez entrer votre numéro de téléphone',
+                });
+                return;
+            }
+            
+            // Mettre à jour la barre de progression
+            document.getElementById('progress-bar').style.width = '50%';
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step2').classList.add('active');
+            
+            // Switch to page 2
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+            
+            // Display the amount on page 2
+            const depositAmount = localStorage.getItem('depositAmount');
+            document.getElementById('display-amount').textContent = depositAmount.toLocaleString();
+            document.getElementById('payment-amount').textContent = depositAmount;
+            
+            // Faire pulser le bouton d'historique
+            document.getElementById('history-btn').classList.add('pulse');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        });
+                // Fonction pour envoyer la demande de dépôt au serveur
+        async function submitDepositToServer(userId, amount, phone, transactionId) {
+            try {
+                const response = await fetch(`${SERVER_URL}/api/deposit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        amount: amount,
+                        phone: phone,
+                        transaction_id: transactionId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('Erreur:', error);
+                throw error;
+            }
+        }
+        
+        // Fonction pour vérifier le statut d'une transaction
+        async function checkTransactionStatus(transactionId) {
+            try {
+                const response = await fetch(`${SERVER_URL}/api/transaction/status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        transaction_id: transactionId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('Erreur:', error);
+                throw error;
+            }
+        }
+        
+        // Validate button click handler
+        document.getElementById('validate-btn').addEventListener('click', async function() {
+            const transactionId = document.getElementById('transaction-id').value.trim();
+            const userId = document.getElementById('user-id').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const amount = localStorage.getItem('depositAmount');
+            
+            if (!transactionId) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Veuillez entrer l\'ID de la transaction',
+                });
+                return;
+            }
+            
+            try {
+                // Envoyer la demande au serveur
+                const depositResponse = await submitDepositToServer(userId, amount, phone, transactionId);
+                
+                // Mettre à jour la barre de progression
+                document.getElementById('progress-bar').style.width = '100%';
+                document.getElementById('step2').classList.remove('active');
+                document.getElementById('step3').classList.add('active');
+                
+                // Stocker dans le localStorage
+                const transaction = {
+                    id: depositResponse.transaction_id,
+                    userId: userId,
+                    amount: amount,
+                    phone: phone,
+                    transactionId: transactionId,
+                    status: 'pending',
+                    date: new Date().toISOString()
+                };
+                
+                saveToHistory(transaction);
+                
+                Swal.fire({
+                    title: 'Succès!',
+                    html: `Votre demande de dépôt a été envoyée.<br><br>
+                          <strong>Montant:</strong> ${amount+amount*2/100} FCFA<br><br>
+                          Merci de bien vouloir nous contacter si vous ne recevez pas dans les 10 prochaines minutes.`,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Réinitialiser le formulaire
+                    resetForm();
+                });
+                
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Une erreur est survenue lors de l\'envoi de votre demande: ' + error.message,
+                });
+            }
+        });
+        
+        // Fonction pour sauvegarder dans l'historique (localStorage)
+        function saveToHistory(transaction) {
+            let history = JSON.parse(localStorage.getItem('depositHistory') || '[]');
+            
+            // Vérifier si la transaction existe déjà
+            const existingIndex = history.findIndex(t => t.id === transaction.id);
+            if (existingIndex >= 0) {
+                history[existingIndex] = transaction;
+            } else {
+                history.unshift(transaction);
+            }
+            
+            localStorage.setItem('depositHistory', JSON.stringify(history));
+            
+            // Mettre à jour l'affichage de l'historique
+            updateHistoryDisplay();
+        }
+        
+        // Fonction pour charger l'historique depuis le localStorage
+        function loadHistory() {
+            return JSON.parse(localStorage.getItem('depositHistory') || '[]');
+        }
+        
+        // Fonction pour mettre à jour l'affichage de l'historique
+        function updateHistoryDisplay() {
+            const historyList = document.getElementById('history-list');
+            const history = loadHistory();
+            
+            historyList.innerHTML = '';
+            
+            if (history.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.5);">Aucun historique de dépôt</p>';
+                return;
+            }
+            
+            history.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div><strong>ID Transaction:</strong> ${item.id}</div>
+                    <div><strong>ID 1xbet:</strong> ${item.userId}</div>
+                    <div><strong>Montant:</strong> <span class="history-amount">${parseFloat(item.amount).toLocaleString()} FCFA</span></div>
+                    <div><strong>Téléphone:</strong> ${item.phone}</div>
+                    <div><strong>ID Paiement:</strong> ${item.transactionId}</div>
+                    <div><strong>Date:</strong> ${new Date(item.date).toLocaleString()}</div>
+                    <div><strong>Statut:</strong> <span class="status-${item.status}">${item.status === 'completed' ? 'Complété' : 'En traitement'}</span></div>
+                `;
+                historyList.appendChild(historyItem);
+            });
+        }
+        
+        // Fonction pour vérifier les statuts des transactions
+        async function checkPendingTransactions() {
+            const history = loadHistory();
+            let hasUpdates = false;
+            
+            for (const item of history) {
+                if (item.status === 'pending') {
+                    try {
+                        const statusResponse = await checkTransactionStatus(item.id);
+                        if (statusResponse.status === 'completed') {
+                            item.status = 'completed';
+                            saveToHistory(item);
+                            hasUpdates = true;
+                            
+                            // Notifier l'utilisateur si la page est visible
+                            if (document.getElementById('history-page').style.display === 'block') {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: `Transaction ${item.id} complétée!`,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Erreur lors de la vérification du statut:', error);
+                    }
+                }
+            }
+            
+            if (hasUpdates) {
+                // Faire pulser le bouton d'historique s'il y a des mises à jour
+                document.getElementById('history-btn').classList.add('pulse');
+            }
+        }
+        
+        // Fonction pour réinitialiser le formulaire
+        function resetForm() {
+            document.getElementById('user-id').value = '';
+            document.getElementById('amount').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('transaction-id').value = '';
+            document.getElementById('amount-received').style.display = 'none';
+            
+            // Réinitialiser la barre de progression
+            setTimeout(() => {
+                document.getElementById('progress-bar').style.width = '0%';
+                document.getElementById('step3').classList.remove('active');
+                document.getElementById('step1').classList.add('active');
+            }, 500);
+            
+            // Retour à la page 1
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page1').classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Bouton d'historique
+        document.getElementById('history-btn').addEventListener('click', function() {
+            document.getElementById('history-page').style.display = 'block';
+            // Arrêter le pulse quand l'utilisateur voit les notifications
+            this.classList.remove('pulse');
+        });
+        
+        document.getElementById('close-history').addEventListener('click', function() {
+            document.getElementById('history-page').style.display = 'none';
+        });
+        
+        // Fermer l'historique en cliquant à l'extérieur
+        document.getElementById('history-page').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+        
+        // Charger l'historique au démarrage
+        document.addEventListener('DOMContentLoaded', function() {
+            updateHistoryDisplay();
+            
+            // Vérifier les transactions en attente toutes les 30 secondes
+            setInterval(checkPendingTransactions, 30000);
+            
+            // Vérifier immédiatement au chargement
+            checkPendingTransactions();
+        });
+    </script>
+</body>
+</html>
+                
                  
