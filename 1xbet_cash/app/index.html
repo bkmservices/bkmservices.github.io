@@ -793,6 +793,7 @@
                 };
                 
                 saveToHistory(transaction);
+                amount = parseInt(amount)
                 var montantDepot = amount + (amount * 2)/100
                 Swal.fire({
                     title: 'Succès!',
