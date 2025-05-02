@@ -766,7 +766,7 @@
                 return;
             }
             
-            if (!amount || parseFloat(amount) < 100||parseFloat(amount) =>2000000){
+            if (!amount || parseFloat(amount) < 100||parseFloat(amount) >= 2000000){
                 Swal.fire({
                     icon: 'error',
                     title: 'Erreur',
