@@ -766,11 +766,11 @@
                 return;
             }
             
-            if (!amount || parseFloat(amount) <= 0) {
+            if (!amount || parseFloat(amount) < 100||parseFloat(amount) =>2000000){
                 Swal.fire({
                     icon: 'error',
                     title: 'Erreur',
-                    text: 'Veuillez entrer un montant valide',
+                    text: 'Veuillez entrer un montant valide situé entre 100FCFA et 2 000 000FCFA',
                 });
                 return;
             }
