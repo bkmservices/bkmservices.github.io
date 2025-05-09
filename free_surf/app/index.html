@@ -6,6 +6,51 @@
     <title>Free Surf VPN - Navigation sans limites</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+            #welcomeModal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.7);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #welcomeContent {
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+        max-width: 500px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    #welcomeContent h2 {
+        color: #2c3e50;
+        margin-top: 0;
+    }
+    
+    #welcomeContent p {
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+    
+    #closeWelcome {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    
+    #closeWelcome:hover {
+        background-color: #2980b9;
+    }
         :root {
             --primary: #2563eb;
             --secondary: #1e40af;
@@ -792,7 +837,7 @@
                 <div class="contact-info">
                     <h3>Informations de contact</h3>
                     <p><i class="fas fa-map-marker-alt"></i> Service disponible dans toute l'Afrique</p>
-                    <p><i class="fas fa-envelope"></i> contact@freesurfvpn.com</p>
+                    <p><i class="fas fa-envelope"></i> techsmart819@gmail.com</p>
                     <p><i class="fas fa-phone"></i> +228 93 28 16 41</p>
                     
                     <div class="social-links">
@@ -834,8 +879,33 @@
             </div>
         </div>
     </footer>
-
+<div id="welcomeModal">
+    <div id="welcomeContent">
+        <h2>Bienvenue !</h2>
+        <p>Bienvenue sur le site web de VPN Boy Technologie</p>
+        <button id="closeWelcome">Fermer</button>
+    </div>
+</div>
     <script>
+        <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Afficher la modal
+        const welcomeModal = document.getElementById('welcomeModal');
+        welcomeModal.style.display = 'flex';
+        
+        // Fermer la modal quand on clique sur le bouton
+        document.getElementById('closeWelcome').addEventListener('click', function() {
+            welcomeModal.style.display = 'none';
+        });
+        
+        // Fermer la modal quand on clique en dehors du contenu
+        welcomeModal.addEventListener('click', function(e) {
+            if (e.target === welcomeModal) {
+                welcomeModal.style.display = 'none';
+            }
+        });
+    });
+</script>
         // Country Detection
         document.addEventListener('DOMContentLoaded', function() {
             // Simulate country detection (in a real app, you would use an API)
