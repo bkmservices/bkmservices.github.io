@@ -708,4 +708,271 @@
                     <h3>VPN Préconfiguré</h3>
                     <div class="price">1000F <span>/ à vie</span></div>
                     <ul class="pricing-features">
+                               <li>Application préconfigurée</li>
+                        <li>Accès à vie</li>
+                        <li>Mises à jour incluses</li>
+                        <li>Support technique</li>
+                    </ul>
+                    <a href="#" class="cta-button">Acheter maintenant</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apps Section -->
+    <section class="apps" id="apps">
+        <div class="container">
+            <div class="section-title">
+                <h2>Applications Premium Disponibles</h2>
+                <p>+300 applications premium à vie sans abonnement avec droit de revente</p>
+            </div>
+            <div class="apps-grid">
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fab fa-netflix"></i>
+                    </div>
+                    <h3>Netflix Premium</h3>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3>WhatsApp GB</h3>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fas fa-cut"></i>
+                    </div>
+                    <h3>CapCut Pro</h3>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fas fa-caption"></i>
+                    </div>
+                    <h3>Captions Premium</h3>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>ChatGPT Premium</h3>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <h3>YouTube Premium</h3>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fab fa-spotify"></i>
+                    </div>
+                    <h3>Spotify Premium</h3>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>Filmora Premium</h3>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="https://wa.me/22893281641" class="cta-button">Commandez maintenant</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contactez-nous</h2>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Informations de contact</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Service disponible dans toute l'Afrique</p>
+                    <p><i class="fas fa-envelope"></i> contact@freesurfvpn.com</p>
+                    <p><i class="fas fa-phone"></i> +228 93 28 16 41</p>
+                    
+                    <div class="social-links">
+                        <a href="https://wa.me/22893281641" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://t.me/footboytechnoligie" target="_blank"><i class="fab fa-telegram"></i></a>
+                        <a href="https://youtube.com/@vpn_boytechnologie?si=FWOJBD1HvzZqMIYs" target="_blank"><i class="fab fa-youtube"></i></a>
+                       
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/22893281641" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- YouTube Float -->
+    <a href="https://youtube.com/@vpn_boytechnologie?si=FWOJBD1HvzZqMIYs" class="youtube-float" target="_blank">
+        <i class="fab fa-youtube"></i>
+    </a>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">Accueil</a>
+                <a href="#features">Fonctionnalités</a>
+                <a href="#pricing">Tarifs</a>
+                <a href="#apps">Applications</a>
+                <a href="#contact">Contact</a>
+                <a href="https://youtube.com/@vpn_boytechnologie?si=FWOJBD1HvzZqMIYs" target="_blank">YouTube</a>
+                <a href="#">Politique de confidentialité</a>
+                <a href="#">Conditions d'utilisation</a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Free Surf VPN. Tous droits réservés. Produit par BKM Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Country Detection
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate country detection (in a real app, you would use an API)
+            const countries = {
+                'BF': 'Burkina Faso',
+                'TG': 'Togo',
+                'CI': 'Côte d\'Ivoire',
+                'SN': 'Sénégal',
+                'ML': 'Mali',
+                'NE': 'Niger',
+                'GN': 'Guinée'
+            };
+            
+            // Get a random country for demo purposes
+            const countryCodes = Object.keys(countries);
+            const randomCountryCode = countryCodes[Math.floor(Math.random() * countryCodes.length)];
+            const countryName = countries[randomCountryCode];
+            
+            document.getElementById('country-specific').textContent = `Le Surf aussi disponible pour : ${countryName}`;
+            
+            // Pricing tabs functionality
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const pricingCards = document.querySelectorAll('.pricing-card');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    button.classList.add('active');
+                    
+                    const country = button.getAttribute('data-country');
+                    
+                    // Show/hide pricing cards based on country
+                    pricingCards.forEach(card => {
+                        if (card.getAttribute('data-country') === country) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                        
+                        // Close mobile menu if open
+                        if (navLinks.style.display === 'flex') {
+                            navLinks.style.display = 'none';
+                        }
+                    }
+                });
+            });
+
+            // Countdown for special offers
+            function startCountdown() {
+                const countdownDate = new Date();
+                countdownDate.setDate(countdownDate.getDate() + 3); // 3 days from now
+                
+                
+                countdownElement.style.position = 'fixed';
+                countdownElement.style.bottom = '180px';
+                countdownElement.style.right = '30px';
+                countdownElement.style.backgroundColor = '#ef4444';
+                countdownElement.style.color = 'white';
+                countdownElement.style.padding = '15px';
+                countdownElement.style.borderRadius = '10px';
+                countdownElement.style.zIndex = '100';
+                countdownElement.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                
+                
+                document.body.appendChild(countdownElement);
+                
+                const countdownTimer = setInterval(function() {
+                    const now = new Date().getTime();
+                    const distance = countdownDate - now;
+                    
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    
+                    document.getElementById("countdown-timer").innerHTML = `
+                        ${days}j ${hours}h ${minutes}m ${seconds}s
+                    `;
+                    
+                    if (distance < 0) {
+                        clearInterval(countdownTimer);
+                        countdownElement.style.display = 'none';
+                    }
+                }, 1000);
+            }
+
+            // Initialize all functions
+            startCountdown();
+            
+            // Real country detection via API
+            fetch('https://ipapi.co/json/')
+                .then(response => response.json())
+                .then(data => {
+                    const countryCode = data.country;
+                    const countryName = data.country_name;
+                    
+                    document.getElementById('country-specific').textContent = 
+                        `Le Surf aussi disponible pour : ${countryName}`;
+                    
+                    // Active automatically the corresponding country tab
+                    if (countryCode === 'BF' || countryCode === 'TG') {
+                        const tabButton = document.querySelector(`.tab-button[data-country="${countryCode.toLowerCase()}"]`);
+                        if (tabButton) tabButton.click();
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur de détection du pays:', error);
+                });
+        });
+    </script>
+</body>
+    </html>
           
