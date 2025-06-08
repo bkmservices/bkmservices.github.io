@@ -3,1046 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Surf VPN - Navigation sans limites</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Fin d'abonnement - Hébergement Web</title>
     <style>
-            #welcomeModal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.7);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    #welcomeContent {
-        background-color: #f8f9fa;
-        padding: 30px;
-        border-radius: 10px;
-        text-align: center;
-        max-width: 500px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    
-    #welcomeContent h2 {
-        color: #2c3e50;
-        margin-top: 0;
-    }
-    
-    #welcomeContent p {
-        margin-bottom: 20px;
-        font-size: 16px;
-    }
-    
-    #closeWelcome {
-        background-color: #3498db;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-    
-    #closeWelcome:hover {
-        background-color: #2980b9;
-    }
-        :root {
-            --primary: #2563eb;
-            --secondary: #1e40af;
-            --accent: #3b82f6;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --youtube: #FF0000;
-        }
-
-        * {
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f1f5f9;
-            color: var(--dark);
+            color: #333;
             line-height: 1.6;
         }
-
+        
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo i {
-            font-size: 1.8rem;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            opacity: 0.8;
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1483729558449-99ef09a8c325?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 5rem 1rem;
-            position: relative;
-        }
-
-        .hero-content {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        
+        h1 {
+            color: #e74c3c;
+            margin-bottom: 20px;
         }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
+        
+        .status {
+            background-color: #ffecec;
+            color: #e74c3c;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: bold;
+            border-left: 5px solid #e74c3c;
         }
-
-        .cta-button {
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-card h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .contact-buttons {
+            margin: 40px 0 20px;
+        }
+        
+        .btn {
             display: inline-block;
-            background-color: var(--accent);
-            color: white;
-            padding: 0.8rem 2rem;
+            padding: 12px 25px;
+            margin: 10px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s ease;
-            border: 2px solid var(--accent);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
-
-        .cta-button:hover {
-            background-color: transparent;
-            transform: translateY(-3px);
-        }
-
-        .country-detected {
-            margin-top: 2rem;
-            padding: 1rem;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            display: inline-block;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 4rem 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-title h2 {
-            font-size: 2rem;
-            color: var(--dark);
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background-color: var(--primary);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            text-align: center;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-
-        /* Pricing Section */
-        .pricing {
-            padding: 4rem 0;
-            background-color: #e2e8f0;
-        }
-
-        .pricing-tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-            gap: 10px;
-        }
-
-        .tab-button {
-            padding: 0.8rem 1.5rem;
-            background-color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .tab-button.active {
-            background-color: var(--primary);
+        
+        .btn-email {
+            background-color: #3498db;
             color: white;
         }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .pricing-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .pricing-card.popular {
-            border: 2px solid var(--primary);
-        }
-
-        .popular-badge {
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background-color: var(--primary);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .pricing-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .price {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-
-        .price span {
-            font-size: 1rem;
-            color: var(--dark);
-            opacity: 0.7;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .pricing-features li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .pricing-features li:last-child {
-            border-bottom: none;
-        }
-
-        /* Apps Section */
-        .apps {
-            padding: 4rem 0;
-        }
-
-        .apps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .app-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .app-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .app-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f1f5f9;
-            border-radius: 15px;
-            font-size: 1.8rem;
-            color: var(--primary);
-        }
-
-        .app-card h3 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 4rem 0;
-            background-color: var(--dark);
-            color: white;
-        }
-
-        .contact-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .contact-info h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-info p {
-            margin-bottom: 1rem;
-            opacity: 0.9;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .social-links a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            background-color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        .social-links a.youtube:hover {
-            background-color: var(--youtube);
-        }
-
-        .contact-form .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-form label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .contact-form input,
-        .contact-form textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .contact-form textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .contact-form button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .contact-form button:hover {
-            background-color: var(--secondary);
-        }
-
-        /* WhatsApp Button */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
+        
+        .btn-whatsapp {
             background-color: #25D366;
             color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 99;
-            transition: all 0.3s ease;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        /* YouTube Float Button */
-        .youtube-float {
-            position: fixed;
-            bottom: 110px;
-            right: 30px;
-            background-color: var(--youtube);
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 99;
-            transition: all 0.3s ease;
-        }
-
-        .youtube-float:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            background-color: #0f172a;
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: white;
-            text-decoration: none;
-            opacity: 0.8;
-            transition: all 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            opacity: 1;
-            color: var(--accent);
-        }
-
-        .copyright {
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .features-grid, .pricing-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .pricing-tabs {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .tab-button {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .youtube-float {
-                bottom: 100px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-                font-size: 1.5rem;
-            }
-
-            .whatsapp-float {
-                right: 20px;
-                width: 50px;
-                height: 50px;
-                font-size: 1.5rem;
-            }
-        }
-
-        /* Animations */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
-        .feature-card {
-            animation: float 4s ease-in-out infinite;
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #7f8c8d;
         }
         
-        .feature-card:nth-child(1) { animation-delay: 0s; }
-        .feature-card:nth-child(2) { animation-delay: 0.5s; }
-        .feature-card:nth-child(3) { animation-delay: 1s; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .highlight {
+            background-color: #fffde7;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
         }
-        
-        .hero-content, .section-title, .feature-card, .pricing-card, .app-card {
-            animation: fadeIn 1s ease-out forwards;
-        }
-        
-        .section-title { animation-delay: 0.3s; }
-        .feature-card:nth-child(1) { animation-delay: 0.5s; }
-        .feature-card:nth-child(2) { animation-delay: 0.7s; }
-        .feature-card:nth-child(3) { animation-delay: 0.9s; }
-        .pricing-card { animation-delay: 1.1s; }
-        .app-card { animation-delay: 1.3s; }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Free Surf VPN</span>
-                </div>
-               
-
-            </nav>
+    <div class="container">
+        <h1>Fin d'abonnement d'hébergement</h1>
+        
+        <div class="status">
+            ⚠️ Le site est actuellement hors service. Veuillez contacter le développeur.
         </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Bienvenue sur Free Surf</h1>
-                <p>Commencez à naviguer sur le web sans limite</p>
-                <a href="#pricing" class="cta-button">Commencer maintenant</a>
-                <div class="country-detected">
-                    <p id="country-specific">Le Surf aussi disponible pour : Chargement...</p>
-                </div>
+        
+        <p>L'abonnement d'hébergement de ce site web a expiré. Voici les statistiques du site :</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Date de création</h3>
+                <div class="stat-value">09/05/2025</div>
             </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="container">
-            <div class="section-title">
-                <h2>Pourquoi choisir Free Surf VPN</h2>
+            
+            <div class="stat-card">
+                <h3>Visiteurs moyens</h3>
+                <div class="stat-value">346</div>
+                <p>par mois</p>
             </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <h3>Sécurité maximale</h3>
-                    <p>Protégez vos données avec notre cryptage de niveau militaire et naviguez en toute confidentialité.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3>Vitesse ultrarapide</h3>
-                    <p>Profitez d'une connexion rapide et stable sans limitation de bande passante.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-globe"></i>
-                    </div>
-                    <h3>Accès mondial</h3>
-                    <p>Débloquez des contenus géo-restreints et accédez à Internet sans frontières.</p>
-                </div>
+            
+            <div class="stat-card">
+                <h3>Visites quotidiennes</h3>
+                <div class="stat-value">15</div>
+                <p>par jour en moyenne</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Visites totales</h3>
+                <div class="stat-value">450</div>
+                <p>du 09/05/2025 au 08/06/2025</p>
             </div>
         </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="pricing" id="pricing">
-        <div class="container">
-            <div class="section-title">
-                <h2>Nos offres spéciales</h2>
-            </div>
-            <div class="pricing-tabs">
-                <button class="tab-button active" data-country="bf">Burkina Faso</button>
-                <button class="tab-button" data-country="tg">Togo</button>
-            </div>
-            <div class="pricing-grid">
-                <!-- Burkina Faso Pricing -->
-                <div class="pricing-card" data-country="bf">
-                    <h3>Hebdomadaire</h3>
-                    <div class="price">500F <span>/ semaine</span></div>
-                    <ul class="pricing-features">
-                        <li>Accès complet au VPN</li>
-                        <li>Support 24/7</li>
-                        <li>Serveurs optimisés</li>
-                        <li>Garantie de remboursement</li>
-                    </ul>
-                    <a href="https://wa.me/22893281641" class="cta-button">Acheter maintenant</a>
-                </div>
-                <div class="pricing-card popular" data-country="bf">
-                    <div class="popular-badge">Populaire</div>
-                    <h3>Mensuel</h3>
-                    <div class="price">1000F <span>/ mois</span></div>
-                    <ul class="pricing-features">
-                        <li>Toutes les fonctionnalités hebdo</li>
-                        <li>+ 5 appareils simultanés</li>
-                        <li>Priorité sur les serveurs</li>
-                        <li>Economisez 50%</li>
-                    </ul>
-                    <a href="https://wa.me/22893281641" class="cta-button">Acheter maintenant</a>
-                </div>
-                <div class="pricing-card" data-country="bf">
-                    <h3>Formation</h3>
-                    <div class="price">2000F <span>/ formation</span></div>
-                    <ul class="pricing-features">
-                        <li>Formation complète VPN</li>
-                        <li>Guide d'utilisation</li>
-                        <li>Support personnalisé</li>
-                        <li>Certificat de formation</li>
-                    </ul>
-                    <a href="https://wa.me/22893281641" class="cta-button">S'inscrire</a>
-                </div>
-
-                <!-- Togo Pricing (hidden by default) -->
-                <div class="pricing-card" data-country="tg" style="display: none;">
-                    <h3>VPN Préconfiguré</h3>
-                    <div class="price">1000F <span>/ à vie</span></div>
-                    <ul class="pricing-features">
-                               <li>Application préconfigurée</li>
-                        <li>Accès à vie</li>
-                        <li>Mises à jour incluses</li>
-                        <li>Support technique</li>
-                    </ul>
-                    <a href="#" class="cta-button">Acheter maintenant</a>
-                </div>
-            </div>
+        
+        <p>L'abonnement précédent était au tarif de <span class="highlight">3$/mois</span>.</p>
+        
+        <div class="contact-buttons">
+            <p>Si vous êtes le propriétaire de ce site, veuillez nous contacter pour renouveler l'abonnement :</p>
+            
+            <a href="mailto:bkmservicebf@gmail.com" class="btn btn-email">📧 Envoyer un Email</a>
+            <a href="https://wa.me/22673713252" class="btn btn-whatsapp">💬 WhatsApp (+226) 73 71 32 52</a>
+            <a href="https://wa.me/22658902040" class="btn btn-whatsapp">💬 WhatsApp (+226) 58 90 20 40</a>
         </div>
-    </section>
-
-    <!-- Apps Section -->
-    <section class="apps" id="apps">
-        <div class="container">
-            <div class="section-title">
-                <h2>Applications Premium Disponibles</h2>
-                <p>+300 applications premium à vie sans abonnement avec droit de revente</p>
-            </div>
-            <div class="apps-grid">
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fab fa-netflix"></i>
-                    </div>
-                    <h3>Netflix Premium</h3>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fab fa-whatsapp"></i>
-                    </div>
-                    <h3>WhatsApp GB</h3>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fas fa-cut"></i>
-                    </div>
-                    <h3>CapCut Pro</h3>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fas fa-caption"></i>
-                    </div>
-                    <h3>Captions Premium</h3>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <h3>ChatGPT Premium</h3>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fab fa-youtube"></i>
-                    </div>
-                    <h3>YouTube Premium</h3>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fab fa-spotify"></i>
-                    </div>
-                    <h3>Spotify Premium</h3>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fas fa-video"></i>
-                    </div>
-                    <h3>Filmora Premium</h3>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 2rem;">
-                <a href="https://wa.me/22893281641" class="cta-button">Commandez maintenant</a>
-            </div>
+        
+        <div class="footer">
+            <p>Service client - BKM Service BF</p>
+            <p>© 2025 - Tous droits réservés</p>
         </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <div class="section-title">
-                <h2>Contactez-nous</h2>
-            </div>
-            <div class="contact-container">
-                <div class="contact-info">
-                    <h3>Informations de contact</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> Service disponible dans toute l'Afrique</p>
-                    <p><i class="fas fa-envelope"></i> techsmart819@gmail.com</p>
-                    <p><i class="fas fa-phone"></i> +228 93 28 16 41</p>
-                    
-                    <div class="social-links">
-                        <a href="https://wa.me/22893281641" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                        <a href="https://t.me/footboytechnoligie" target="_blank"><i class="fab fa-telegram"></i></a>
-                        <a href="https://youtube.com/@vpn_boytechnologie?si=FWOJBD1HvzZqMIYs" target="_blank"><i class="fab fa-youtube"></i></a>
-                       
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- WhatsApp Float -->
-    <a href="https://wa.me/22893281641" class="whatsapp-float" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-    <!-- YouTube Float -->
-    <a href="https://youtube.com/@vpn_boytechnologie?si=FWOJBD1HvzZqMIYs" class="youtube-float" target="_blank">
-        <i class="fab fa-youtube"></i>
-    </a>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-links">
-                <a href="#">Accueil</a>
-                <a href="#features">Fonctionnalités</a>
-                <a href="#pricing">Tarifs</a>
-                <a href="#apps">Applications</a>
-                <a href="#contact">Contact</a>
-                <a href="https://youtube.com/@vpn_boytechnologie?si=FWOJBD1HvzZqMIYs" target="_blank">YouTube</a>
-                <a href="#">Politique de confidentialité</a>
-                <a href="#">Conditions d'utilisation</a>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2023 Free Surf VPN. Tous droits réservés. Produit par BKM Service</p>
-            </div>
-        </div>
-    </footer>
-<div id="welcomeModal">
-    <div id="welcomeContent">
-        <h2>Bienvenue !</h2>
-        <p>Bienvenue sur le site web de VPN Boy Technologie</p>
-        <button id="closeWelcome">Fermer</button>
     </div>
-</div>
-    <script>
-        
-    document.addEventListener('DOMContentLoaded', function() {
-        // Afficher la modal
-        const welcomeModal = document.getElementById('welcomeModal');
-        welcomeModal.style.display = 'flex';
-        
-        // Fermer la modal quand on clique sur le bouton
-        document.getElementById('closeWelcome').addEventListener('click', function() {
-            welcomeModal.style.display = 'none';
-        });
-        
-        // Fermer la modal quand on clique en dehors du contenu
-        welcomeModal.addEventListener('click', function(e) {
-            if (e.target === welcomeModal) {
-                welcomeModal.style.display = 'none';
-            }
-        });
-    });
-    
-        // Country Detection
-        document.addEventListener('DOMContentLoaded', function() {
-            // Simulate country detection (in a real app, you would use an API)
-            const countries = {
-                'BF': 'Burkina Faso',
-                'TG': 'Togo',
-                'CI': 'Côte d\'Ivoire',
-                'SN': 'Sénégal',
-                'ML': 'Mali',
-                'NE': 'Niger',
-                'GN': 'Guinée'
-            };
-            
-            // Get a random country for demo purposes
-            const countryCodes = Object.keys(countries);
-            const randomCountryCode = countryCodes[Math.floor(Math.random() * countryCodes.length)];
-            const countryName = countries[randomCountryCode];
-            
-            document.getElementById('country-specific').textContent = `Le Surf aussi disponible pour : ${countryName}`;
-            
-            // Pricing tabs functionality
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const pricingCards = document.querySelectorAll('.pricing-card');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Remove active class from all buttons
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    // Add active class to clicked button
-                    button.classList.add('active');
-                    
-                    const country = button.getAttribute('data-country');
-                    
-                    // Show/hide pricing cards based on country
-                    pricingCards.forEach(card => {
-                        if (card.getAttribute('data-country') === country) {
-                            card.style.display = 'block';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-                });
-            });
-            
-            // Mobile menu toggle
-            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-            const navLinks = document.querySelector('.nav-links');
-            
-            mobileMenuBtn.addEventListener('click', () => {
-                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-            });
-            
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                        
-                        // Close mobile menu if open
-                        if (navLinks.style.display === 'flex') {
-                            navLinks.style.display = 'none';
-                        }
-                    }
-                });
-            });
-
-            // Countdown for special offers
-            function startCountdown() {
-                const countdownDate = new Date();
-                countdownDate.setDate(countdownDate.getDate() + 3); // 3 days from now
-                
-                
-                countdownElement.style.position = 'fixed';
-                countdownElement.style.bottom = '180px';
-                countdownElement.style.right = '30px';
-                countdownElement.style.backgroundColor = '#ef4444';
-                countdownElement.style.color = 'white';
-                countdownElement.style.padding = '15px';
-                countdownElement.style.borderRadius = '10px';
-                countdownElement.style.zIndex = '100';
-                countdownElement.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-                
-                
-                document.body.appendChild(countdownElement);
-                
-                const countdownTimer = setInterval(function() {
-                    const now = new Date().getTime();
-                    const distance = countdownDate - now;
-                    
-                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                    
-                    document.getElementById("countdown-timer").innerHTML = `
-                        ${days}j ${hours}h ${minutes}m ${seconds}s
-                    `;
-                    
-                    if (distance < 0) {
-                        clearInterval(countdownTimer);
-                        countdownElement.style.display = 'none';
-                    }
-                }, 1000);
-            }
-
-            // Initialize all functions
-            startCountdown();
-            
-            // Real country detection via API
-            fetch('https://ipapi.co/json/')
-                .then(response => response.json())
-                .then(data => {
-                    const countryCode = data.country;
-                    const countryName = data.country_name;
-                    
-                    document.getElementById('country-specific').textContent = 
-                        `Le Surf aussi disponible pour : ${countryName}`;
-                    
-                    // Active automatically the corresponding country tab
-                    if (countryCode === 'BF' || countryCode === 'TG') {
-                        const tabButton = document.querySelector(`.tab-button[data-country="${countryCode.toLowerCase()}"]`);
-                        if (tabButton) tabButton.click();
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur de détection du pays:', error);
-                });
-        });
-    </script>
 </body>
-    </html>
-          
+</html>
