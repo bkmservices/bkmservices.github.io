@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valider ou Rejeter Dépôt</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 2em;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .btn {
+      padding: 0.8em 1.5em;
+      margin: 0.5em;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    .valider {
+      background-color: #27ae60;
+      color: white;
+    }
+    .valider:hover {
+      background-color: #219653;
+    }
+    .rejeter {
+      background-color: #e74c3c;
+      color: white;
+    }
+    .rejeter:hover {
+      background-color: #c0392b;
+    }
+    .input-cause {
+      margin-top: 15px;
+      display: none;
+    }
+    textarea {
+      width: 100%;
+      padding: 0.7em;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: none;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #2d3436;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Traitement de dépôt</h2>
+    <button class="btn valider" onclick="validerDepot()">✅ Valider</button>
+    <button class="btn rejeter" onclick="afficherChampRejet()">❌ Rejeter</button>
+
+    <div class="input-cause" id="causeDiv">
+      <textarea id="causeText" rows="4" placeholder="Veuillez expliquer la raison du rejet..."></textarea>
+      <button class="btn rejeter" onclick="rejeterDepot()">Envoyer le rejet</button>
+    </div>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const number = urlParams.get("number");
+    const idtrans = urlParams.get("idtrans");
+    const serveur = urlParams.get("serveur");
+
+    const resultDiv = document.getElementById("result");
+    const causeDiv = document.getElementById("causeDiv");
+
+    function afficherMessage(msg, success = true) {
+      resultDiv.textContent = msg;
+      resultDiv.style.color = success ? "green" : "red";
+    }
+
+    function afficherChampRejet() {
+      causeDiv.style.display = "block";
+    }
+
+    async function validerDepot() {
+      try {
+        const response = await fetch(serveur, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ number, idtrans, etat: "valider" })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          afficherMessage("✅ Dépôt validé avec succès !");
+        } else {
+          afficherMessage("❌ Erreur : " + data.detail, false);
+        }
+      } catch (err) {
+        afficherMessage("❌ Problème de connexion au serveur", false);
+      }
+    }
+
+    async function rejeterDepot() {
+      const cause = document.getElementById("causeText").value.trim();
+      if (!cause) {
+        alert("Veuillez écrire une raison du rejet.");
+        return;
+      }
+
+      try {
+        const response = await fetch(serveur, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ number, idtrans, etat: "rejeter", cause })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          afficherMessage("✅ Dépôt rejeté avec succès !");
+        } else {
+          afficherMessage("❌ Erreur : " + data.detail, false);
+        }
+      } catch (err) {
+        afficherMessage("❌ Problème de connexion au serveur", false);
+      }
+    }
+  </script>
+</body>
+  </html>
