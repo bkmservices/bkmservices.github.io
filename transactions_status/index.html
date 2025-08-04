@@ -34,6 +34,7 @@
       margin-bottom: 20px;
       font-size: 14px;
       text-align: left;
+      word-break: break-word;
     }
     .btn {
       display: block;
@@ -48,11 +49,10 @@
       font-weight: bold;
       transition: transform 0.2s;
     }
-    .btn:active {
-      transform: scale(0.98);
-    }
+    .btn:active { transform: scale(0.98); }
     .valider { background-color: #28a745; }
     .rejeter { background-color: #dc3545; }
+    .close { background-color: #6c757d; }
     .status {
       margin-top: 15px;
       font-size: 14px;
@@ -85,25 +85,19 @@
       border: 1px solid #ccc;
       resize: none;
     }
-    .close {
-      background: #6c757d;
-    }
   </style>
 </head>
 <body>
 
   <div class="container">
     <h2>Validation de Dépôt</h2>
-    <div class="info">
-      <p><strong>Numéro :</strong> <span id="number"></span></p>
-      <p><strong>ID Transaction :</strong> <span id="idtrans"></span></p>
-    </div>
+    <div class="info" id="paramList"></div>
     <button class="btn valider" onclick="valider()">✅ Valider</button>
     <button class="btn rejeter" onclick="openModal()">❌ Rejeter</button>
     <p class="status" id="status"></p>
   </div>
 
-  <!-- Modale pour la cause du rejet -->
+  <!-- Modale -->
   <div class="modal" id="rejectModal">
     <div class="modal-content">
       <h3>Raison du rejet</h3>
@@ -115,12 +109,20 @@
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const number = params.get("number");
-    const idtrans = params.get("idtrans");
-    const serveur = params.get("serveur");
+    const decodedParams = {};
+    params.forEach((value, key) => {
+      decodedParams[key] = decodeURIComponent(value);
+    });
 
-    document.getElementById("number").textContent = number;
-    document.getElementById("idtrans").textContent = idtrans;
+    // Afficher tous les paramètres dans la section info
+    const paramList = document.getElementById("paramList");
+    paramList.innerHTML = Object.entries(decodedParams)
+      .map(([key, value]) => `<p><strong>${key} :</strong> ${value}</p>`)
+      .join("");
+
+    const number = decodedParams.number;
+    const idtrans = decodedParams.idtrans;
+    const serveur = decodedParams.serveur;
 
     function openModal() {
       document.getElementById("rejectModal").style.display = "flex";
@@ -130,14 +132,7 @@
     }
 
     async function valider() {
-      document.getElementById("status").textContent = "⏳ Validation en cours...";
-      const res = await fetch(serveur, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ number, idtrans, etat: "valider" })
-      });
-      const result = await res.json();
-      document.getElementById("status").textContent = `✅ ${result.message || "Validé avec succès"}`;
+      await envoyer({ number, idtrans, etat: "valider" });
     }
 
     async function rejeter() {
@@ -147,14 +142,24 @@
         return;
       }
       closeModal();
-      document.getElementById("status").textContent = "⏳ Rejet en cours...";
-      const res = await fetch(serveur, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ number, idtrans, etat: "rejeter", cause })
-      });
-      const result = await res.json();
-      document.getElementById("status").textContent = `❌ ${result.message || "Rejeté avec succès"}`;
+      await envoyer({ number, idtrans, etat: "rejeter", cause });
+    }
+
+    async function envoyer(data) {
+      document.getElementById("status").textContent = "⏳ Traitement en cours...";
+      try {
+        const res = await fetch(serveur, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.detail || "Erreur serveur");
+        document.getElementById("status").textContent =
+          (data.etat === "valider" ? "✅ " : "❌ ") + (result.message || "Action réussie");
+      } catch (err) {
+        document.getElementById("status").textContent = "⚠️ Erreur : " + err.message;
+      }
     }
   </script>
 
