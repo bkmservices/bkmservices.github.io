@@ -1,147 +1,99 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Valider ou Rejeter Dépôt</title>
+  <meta charset="UTF-8">
+  <title>Validation de Dépôt</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f7fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .container {
-      background: #fff;
-      padding: 2em;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      font-family: Arial, sans-serif;
       text-align: center;
-      width: 90%;
-      max-width: 400px;
+      padding: 30px;
+      background: #f2f2f2;
     }
-    h2 {
-      margin-bottom: 20px;
-      color: #333;
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      display: inline-block;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .btn {
-      padding: 0.8em 1.5em;
-      margin: 0.5em;
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      font-size: 16px;
       border: none;
-      border-radius: 8px;
-      font-size: 1em;
+      border-radius: 5px;
       cursor: pointer;
-      transition: 0.3s ease;
+      color: white;
     }
     .valider {
-      background-color: #27ae60;
-      color: white;
-    }
-    .valider:hover {
-      background-color: #219653;
+      background-color: #28a745;
     }
     .rejeter {
-      background-color: #e74c3c;
-      color: white;
+      background-color: #dc3545;
     }
-    .rejeter:hover {
-      background-color: #c0392b;
-    }
-    .input-cause {
-      margin-top: 15px;
-      display: none;
-    }
-    textarea {
-      width: 100%;
-      padding: 0.7em;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      resize: none;
-    }
-    #result {
+    .status {
       margin-top: 20px;
       font-weight: bold;
-      color: #2d3436;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Traitement de dépôt</h2>
-    <button class="btn valider" onclick="validerDepot()">✅ Valider</button>
-    <button class="btn rejeter" onclick="afficherChampRejet()">❌ Rejeter</button>
 
-    <div class="input-cause" id="causeDiv">
-      <textarea id="causeText" rows="4" placeholder="Veuillez expliquer la raison du rejet..."></textarea>
-      <button class="btn rejeter" onclick="rejeterDepot()">Envoyer le rejet</button>
-    </div>
+  <div class="box">
+    <h2>Validation de Dépôt</h2>
+    <p><strong>Numéro :</strong> <span id="number"></span></p>
+    <p><strong>ID Transaction :</strong> <span id="idtrans"></span></p>
 
-    <div id="result"></div>
+    <button class="valider" onclick="valider()">✅ Valider</button>
+    <button class="rejeter" onclick="rejeter()">❌ Rejeter</button>
+
+    <p class="status" id="status"></p>
   </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const number = urlParams.get("number");
-    const idtrans = urlParams.get("idtrans");
-    const serveur = urlParams.get("serveur");
+    const params = new URLSearchParams(window.location.search);
+    const number = params.get("number");
+    const idtrans = params.get("idtrans");
+    const serveur = params.get("serveur");
 
-    const resultDiv = document.getElementById("result");
-    const causeDiv = document.getElementById("causeDiv");
+    document.getElementById("number").textContent = number;
+    document.getElementById("idtrans").textContent = idtrans;
 
-    function afficherMessage(msg, success = true) {
-      resultDiv.textContent = msg;
-      resultDiv.style.color = success ? "green" : "red";
+    async function valider() {
+      const res = await fetch(serveur, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          number: number,
+          idtrans: idtrans,
+          etat: "valider"
+        })
+      });
+
+      const result = await res.json();
+      document.getElementById("status").textContent = `✅ ${result.message || "Validé avec succès"}`;
     }
 
-    function afficherChampRejet() {
-      causeDiv.style.display = "block";
-    }
+    async function rejeter() {
+      const cause = prompt("Veuillez indiquer la raison du rejet :");
 
-    async function validerDepot() {
-      try {
-        const response = await fetch(serveur, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ number, idtrans, etat: "valider" })
-        });
-        const data = await response.json();
-        if (response.ok) {
-          afficherMessage("✅ Dépôt validé avec succès !");
-        } else {
-          afficherMessage("❌ Erreur : " + data.detail, false);
-        }
-      } catch (err) {
-        afficherMessage("❌ Problème de connexion au serveur", false);
-      }
-    }
+      if (!cause) return alert("Le rejet a été annulé.");
 
-    async function rejeterDepot() {
-      const cause = document.getElementById("causeText").value.trim();
-      if (!cause) {
-        alert("Veuillez écrire une raison du rejet.");
-        return;
-      }
+      const res = await fetch(serveur, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          number: number,
+          idtrans: idtrans,
+          etat: "rejeter",
+          cause: cause
+        })
+      });
 
-      try {
-        const response = await fetch(serveur, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ number, idtrans, etat: "rejeter", cause })
-        });
-        const data = await response.json();
-        if (response.ok) {
-          afficherMessage("✅ Dépôt rejeté avec succès !");
-        } else {
-          afficherMessage("❌ Erreur : " + data.detail, false);
-        }
-      } catch (err) {
-        afficherMessage("❌ Problème de connexion au serveur", false);
-      }
+      const result = await res.json();
+      document.getElementById("status").textContent = `❌ ${result.message || "Rejeté avec succès"}`;
     }
   </script>
 </body>
-  </html>
+</html>
